@@ -85,7 +85,7 @@ const PropertyForm = ({ onSuccess, onClose }) => {
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-6 flex items-center justify-between flex-shrink-0 shadow-lg">
+        <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-6 pb-7 flex items-center justify-between flex-shrink-0 relative z-10" style={{boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15), inset 0 -2px 0 rgba(255, 255, 255, 0.1)'}}>
           <div>
             <h2 className="text-3xl font-bold text-white">Add New Property</h2>
             <p className="text-blue-100 text-sm mt-1">Fill in the details about your boarding house</p>
@@ -99,7 +99,7 @@ const PropertyForm = ({ onSuccess, onClose }) => {
         </div>
 
         {/* Content */}
-        <form onSubmit={handleSubmit} className="px-8 pb-8 pt-8 space-y-8 overflow-y-auto flex-1">
+        <form onSubmit={handleSubmit} className="px-8 pb-8 pt-6 space-y-8 overflow-y-auto flex-1 relative z-0">
           {error && (
             <Alert variant="error">
               {error}
