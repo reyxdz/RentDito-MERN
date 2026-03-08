@@ -29,6 +29,10 @@ const propertySchema = new mongoose.Schema({
   },
   images: [String],
   amenities: [String],
+  utilitiesIncluded: {
+    type: Boolean,
+    default: false
+  },
   documents: [{
     name: String,
     url: String,

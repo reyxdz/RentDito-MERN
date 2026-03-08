@@ -3,11 +3,13 @@ import { DashboardLayout } from '../../components/layouts/DashboardLayout';
 import { Card, Button } from '../../components/ui';
 import { Building2, MapPin, Users, DollarSign, Plus, Edit, Trash2 } from 'lucide-react';
 import axios from 'axios';
+import PropertyForm from './PropertyForm';
 
 const PropertiesPage = () => {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showForm, setShowForm] = useState(false);
 
   const sidebarItems = [
     { label: 'Dashboard', path: '/dashboard/landlord', icon: <Building2 size={20} /> },
@@ -46,6 +48,11 @@ const PropertiesPage = () => {
     }
   };
 
+  const handlePropertyCreated = () => {
+    setShowForm(false);
+    fetchProperties();
+  };
+
   return (
     <DashboardLayout sidebarItems={sidebarItems}>
       <div className="space-y-8">
@@ -55,11 +62,22 @@ const PropertiesPage = () => {
             <h3 className="text-2xl font-bold text-gray-900">Properties</h3>
             <p className="text-gray-600 mt-1">Manage your boarding houses</p>
           </div>
-          <button className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors">
+          <button
+            onClick={() => setShowForm(true)}
+            className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+          >
             <Plus size={20} />
             <span>Add Property</span>
           </button>
         </div>
+
+        {/* Form Modal */}
+        {showForm && (
+          <PropertyForm
+            onSuccess={handlePropertyCreated}
+            onClose={() => setShowForm(false)}
+          />
+        )}
 
         {/* Error Alert */}
         {error && (
