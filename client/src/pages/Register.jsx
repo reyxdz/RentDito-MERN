@@ -132,6 +132,7 @@ const Register = () => {
               placeholder="••••••••"
               value={formData.password}
               onChange={handleChange}
+              autoComplete="new-password"
               error={validationErrors.password}
               required
             />
@@ -143,6 +144,7 @@ const Register = () => {
               placeholder="••••••••"
               value={formData.confirmPassword}
               onChange={handleChange}
+              autoComplete="new-password"
               error={validationErrors.confirmPassword}
               required
             />

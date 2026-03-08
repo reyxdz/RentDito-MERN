@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Menu, X, LogOut, Settings } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 import useAuthStore from '../../store/authStore';
 import { Navigate } from 'react-router-dom';
 
 export const DashboardLayout = ({ children, sidebarItems }) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const { user, logout } = useAuthStore();
+  const location = useLocation();
 
   if (!user) {
     return <Navigate to="/login" />;
@@ -30,15 +32,19 @@ export const DashboardLayout = ({ children, sidebarItems }) => {
         </div>
 
         <nav className="mt-8 space-y-2 px-2">
-          {sidebarItems.map((item) => (
-            <a
-              key={item.path}
-              href={item.path}
-              className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
+          {sidebarItems.map((item, idx) => (
+            <Link
+              key={`${item.label}-${idx}`}
+              to={item.path}
+              className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                location.pathname === item.path
+                  ? 'bg-blue-600 text-white'
+                  : 'hover:bg-gray-700 text-white'
+              }`}
             >
               {item.icon}
               {sidebarOpen && <span className="text-sm">{item.label}</span>}
-            </a>
+            </Link>
           ))}
         </nav>
 

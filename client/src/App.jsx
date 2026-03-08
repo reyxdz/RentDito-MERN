@@ -5,7 +5,7 @@ import useAuthStore from './store/authStore';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import TenantDashboard from './pages/dashboards/TenantDashboard';
-import LandlordDashboard from './pages/dashboards/LandlordDashboard';
+import LandlordLayout from './pages/dashboards/LandlordLayout';
 import AdminDashboard from './pages/dashboards/AdminDashboard';
 import PlatformAdminDashboard from './pages/dashboards/PlatformAdminDashboard';
 
@@ -26,7 +26,7 @@ function App() {
       case 'tenant':
         return <TenantDashboard />;
       case 'landlord':
-        return <LandlordDashboard />;
+        return <LandlordLayout />;
       case 'landlord-admin':
         return <AdminDashboard />;
       case 'platform-admin':
@@ -45,7 +45,7 @@ function App() {
 
         {/* Dashboard Routes */}
         <Route
-          path="/dashboard"
+          path="/dashboard/*"
           element={user ? getDashboard() : <Navigate to="/login" />}
         />
 

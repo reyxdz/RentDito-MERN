@@ -6,8 +6,8 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 
 const LandlordDashboard = () => {
   const sidebarItems = [
-    { label: 'Dashboard', path: '#', icon: <Building2 size={20} /> },
-    { label: 'Properties', path: '#', icon: <Building2 size={20} /> },
+    { label: 'Dashboard', path: '/dashboard/landlord', icon: <Building2 size={20} /> },
+    { label: 'Properties', path: '/dashboard/landlord/properties', icon: <Building2 size={20} /> },
     { label: 'Tenants', path: '#', icon: <Users size={20} /> },
     { label: 'Payments', path: '#', icon: <CreditCard size={20} /> },
     { label: 'Staff', path: '#', icon: <Users size={20} /> },
@@ -33,15 +33,9 @@ const LandlordDashboard = () => {
     <DashboardLayout sidebarItems={sidebarItems}>
       <div className="space-y-8">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-2xl font-bold text-gray-900">Landlord Dashboard</h3>
-            <p className="text-gray-600 mt-1">Manage properties, earnings, and tenants</p>
-          </div>
-          <button className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors">
-            <Plus size={20} />
-            <span>Add Property</span>
-          </button>
+        <div>
+          <h3 className="text-2xl font-bold text-gray-900">Landlord Dashboard</h3>
+          <p className="text-gray-600 mt-1">Manage properties, earnings, and tenants</p>
         </div>
 
         {/* Stats */}
