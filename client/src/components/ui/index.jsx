@@ -12,7 +12,7 @@ export const Button = ({ children, variant = 'primary', className, ...props }) =
   return (
     <button
       className={clsx(
-        'px-4 py-2 rounded-lg font-semibold transition-colors',
+        'px-4 py-2 rounded-xl font-semibold transition-all duration-200',
         variants[variant],
         className
       )}
@@ -27,7 +27,7 @@ export const Card = ({ children, className, ...props }) => {
   return (
     <div
       className={clsx(
-        'bg-white rounded-lg shadow-sm border border-gray-200 p-6',
+        'bg-white rounded-xl shadow-md border border-gray-100 p-6 transition-shadow hover:shadow-lg',
         className
       )}
       {...props}
@@ -43,7 +43,7 @@ export const Input = ({ label, error, ...props }) => {
       {label && <label className="block text-sm font-medium mb-2">{label}</label>}
       <input
         className={clsx(
-          'w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500',
+          'w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200',
           error ? 'border-red-500' : 'border-gray-300'
         )}
         {...props}

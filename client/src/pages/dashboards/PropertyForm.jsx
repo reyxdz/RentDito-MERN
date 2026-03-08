@@ -82,21 +82,24 @@ const PropertyForm = ({ onSuccess, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-screen overflow-y-auto">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-gray-900">Add New Property</h2>
+        <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-6 flex items-center justify-between rounded-t-2xl">
+          <div>
+            <h2 className="text-3xl font-bold text-white">Add New Property</h2>
+            <p className="text-blue-100 text-sm mt-1">Fill in the details about your boarding house</p>
+          </div>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-white hover:bg-white/20 p-2 rounded-lg transition-colors"
           >
-            <X size={24} />
+            <X size={28} />
           </button>
         </div>
 
         {/* Content */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit} className="p-8 space-y-8">
           {error && (
             <Alert variant="error">
               {error}
@@ -104,8 +107,11 @@ const PropertyForm = ({ onSuccess, onClose }) => {
           )}
 
           {/* Basic Info */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Basic Information</h3>
+          <div className="space-y-5">
+            <div className="flex items-center space-x-3">
+              <div className="w-1 h-8 bg-blue-600 rounded-full"></div>
+              <h3 className="text-xl font-bold text-gray-900">Basic Information</h3>
+            </div>
             
             <Input
               label="Property Title *"
@@ -159,21 +165,24 @@ const PropertyForm = ({ onSuccess, onClose }) => {
                 placeholder="Describe your property, amenities, and what makes it special..."
                 value={formData.description}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all duration-200"
                 rows={4}
               />
             </div>
           </div>
 
           {/* Images */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Property Images</h3>
-            <p className="text-sm text-gray-600">
-              Upload up to 5 images ({images.length}/5)
+          <div className="space-y-5">
+            <div className="flex items-center space-x-3">
+              <div className="w-1 h-8 bg-blue-600 rounded-full"></div>
+              <h3 className="text-xl font-bold text-gray-900">Property Images</h3>
+            </div>
+            <p className="text-sm text-gray-600 ml-4">
+              Upload up to 5 images <span className="font-semibold text-blue-600">({images.length}/5)</span>
             </p>
 
             {images.length < 5 && (
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition-colors">
+              <div className="border-2 border-dashed border-blue-300 rounded-xl p-8 text-center hover:border-blue-500 hover:bg-blue-50/50 transition-all duration-300">
                 <input
                   type="file"
                   multiple
@@ -187,31 +196,35 @@ const PropertyForm = ({ onSuccess, onClose }) => {
                   htmlFor="image-upload"
                   className="cursor-pointer block"
                 >
-                  <Upload className="mx-auto text-gray-400 mb-2" size={32} />
-                  <p className="text-gray-700 font-medium">Click to upload images</p>
-                  <p className="text-sm text-gray-500">PNG, JPG, GIF up to 5MB</p>
+                  <div className="inline-block p-3 bg-blue-100 rounded-xl mb-3">
+                    <Upload className="text-blue-600" size={32} />
+                  </div>
+                  <p className="text-gray-900 font-semibold">Click to upload images</p>
+                  <p className="text-sm text-gray-500 mt-1">PNG, JPG, GIF up to 5MB each</p>
                 </label>
               </div>
             )}
 
             {/* Image Preview */}
             {images.length > 0 && (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
                 {images.map((image, index) => (
                   <div key={index} className="relative group">
                     <img
                       src={image.data}
                       alt={`Preview ${index + 1}`}
-                      className="w-full h-40 object-cover rounded-lg"
+                      className="w-full h-32 object-cover rounded-xl shadow-md group-hover:shadow-lg transition-shadow"
                     />
-                    <button
-                      type="button"
-                      onClick={() => removeImage(index)}
-                      className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                    <p className="text-xs text-gray-600 mt-1 truncate">{image.file}</p>
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 rounded-xl transition-colors flex items-center justify-center">
+                      <button
+                        type="button"
+                        onClick={() => removeImage(index)}
+                        className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                    <p className="text-xs text-gray-600 mt-2 truncate font-medium">{image.file}</p>
                   </div>
                 ))}
               </div>
@@ -219,23 +232,30 @@ const PropertyForm = ({ onSuccess, onClose }) => {
           </div>
 
           {/* Utilities */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Utilities</h3>
-            <label className="flex items-center space-x-3 cursor-pointer">
-              <input
-                type="checkbox"
-                name="utilitiesIncluded"
-                checked={formData.utilitiesIncluded}
-                onChange={handleChange}
-                className="w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
-              />
-              <span className="text-gray-700 font-medium">Utilities included in rent</span>
-            </label>
-            <p className="text-sm text-gray-600">
-              {formData.utilitiesIncluded
-                ? 'Electricity, Water, and Internet are included in the rent'
-                : 'Tenants pay for their own utilities'}
-            </p>
+          <div className="space-y-5">
+            <div className="flex items-center space-x-3">
+              <div className="w-1 h-8 bg-blue-600 rounded-full"></div>
+              <h3 className="text-xl font-bold text-gray-900">Utilities & Amenities</h3>
+            </div>
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-100">
+              <label className="flex items-center space-x-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  name="utilitiesIncluded"
+                  checked={formData.utilitiesIncluded}
+                  onChange={handleChange}
+                  className="w-5 h-5 text-blue-600 rounded-lg focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                />
+                <div className="flex-1">
+                  <span className="text-gray-900 font-semibold block">Include utilities in rent</span>
+                  <span className="text-sm text-gray-600">
+                    {formData.utilitiesIncluded
+                      ? 'Electricity, water, and internet are covered'
+                      : 'Tenants pay for their own utilities'}
+                  </span>
+                </div>
+              </label>
+            </div>
           </div>
 
           {/* Actions */}
@@ -243,16 +263,16 @@ const PropertyForm = ({ onSuccess, onClose }) => {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-semibold transition-colors"
+              className="flex-1 px-4 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl font-semibold transition-colors duration-200"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition-colors disabled:bg-gray-400"
+              className="flex-1 px-4 py-3 text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 rounded-xl font-semibold transition-all duration-200 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
             >
-              {loading ? 'Creating...' : 'Create Property'}
+              {loading ? 'Creating...' : '✨ Create Property'}
             </button>
           </div>
         </form>
