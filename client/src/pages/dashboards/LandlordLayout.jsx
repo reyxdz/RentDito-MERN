@@ -13,7 +13,7 @@ const LandlordLayout = () => {
       <Route path="/" element={<LandlordDashboard />} />
       <Route path="/landlord" element={<LandlordDashboard />} />
       <Route path="/landlord/properties" element={<LocationsView />} />
-      <Route path="/property/:propertyId/units" element={<PropertyUnitsView />} />
+      <Route path="/landlord/property/:propertyId/units" element={<PropertyUnitsView />} />
       <Route path="/occupancy-types/:locationKey" element={<PropertyUnitsView />} />
       <Route path="/occupancy-types/:locationKey/units/:occupancyType" element={<UnitsView />} />
       <Route path="/occupancy-types/:locationKey/units/:occupancyType/tenants/:unitId" element={<TenantsView />} />
