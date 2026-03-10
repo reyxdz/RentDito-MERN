@@ -3,7 +3,7 @@ import { Input, Alert } from '../../components/ui';
 import { X } from 'lucide-react';
 import axios from 'axios';
 
-// Location Form - v2
+// Property Form - v2
 const PropertyForm = ({ onSuccess, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -53,7 +53,7 @@ const PropertyForm = ({ onSuccess, onClose }) => {
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-6 flex items-center justify-between flex-shrink-0">
           <div>
-            <h2 className="text-3xl font-bold text-white">Add New Location</h2>
+            <h2 className="text-3xl font-bold text-white">Add New Property</h2>
             <p className="text-blue-100 text-sm mt-1">Set the location for your units</p>
           </div>
           <button
@@ -72,10 +72,10 @@ const PropertyForm = ({ onSuccess, onClose }) => {
             </Alert>
           )}
 
-          {/* Location Information */}
+          {/* Property Information */}
           <div className="space-y-4">
             <Input
-              label="Location Name *"
+              label="Property Name *"
               type="text"
               name="name"
               placeholder="e.g., Naval Kawayan, Biliran"
@@ -141,7 +141,7 @@ const PropertyForm = ({ onSuccess, onClose }) => {
               disabled={loading}
               className="flex-1 px-4 py-3 text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 rounded-xl font-semibold transition-all duration-200 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
             >
-              {loading ? 'Creating...' : 'Create Location'}
+              {loading ? 'Creating...' : 'Create Property'}
             </button>
           </div>
         </form>
