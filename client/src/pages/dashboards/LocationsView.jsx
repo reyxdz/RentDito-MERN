@@ -126,12 +126,10 @@ const LocationsView = () => {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <h4 className="text-3xl font-bold">{property.city}</h4>
-                      <p className="text-blue-100 text-sm mt-2">
-                        <div className="flex items-start">
-                          <MapPin size={14} className="mr-2 mt-0.5 flex-shrink-0" />
-                          <span>{property.address && `${property.address}, `}{property.barangay}, {property.municipality}, {property.city}</span>
-                        </div>
-                      </p>
+                      <div className="text-blue-100 text-sm mt-2 flex items-start">
+                        <MapPin size={14} className="mr-2 mt-0.5 flex-shrink-0" />
+                        <span>{property.address && `${property.address}, `}{property.barangay}, {property.municipality}, {property.city}</span>
+                      </div>
                     </div>
                     <ArrowRight
                       size={24}
