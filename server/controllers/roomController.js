@@ -1,17 +1,50 @@
 const Room = require('../models/Room');
 const Property = require('../models/Property');
 
+exports.getAllRooms = async (req, res) => {
+  try {
+    const { parentUnitId } = req.query;
+
+    let query = {};
+    
+    // If parentUnitId is provided, filter by it
+    if (parentUnitId) {
+      query.parentUnitId = parentUnitId;
+    }
+
+    const rooms = await Room.find(query)
+      .populate('currentTenant', 'fullName email phone')
+      .populate('parentUnitId', 'roomNumber')
+      .lean();
+
+    res.json({
+      success: true,
+      data: rooms
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 exports.getRoomsByProperty = async (req, res) => {
   try {
     const { propertyId } = req.params;
+    const { parentUnitId } = req.query;
 
-    // Verify property exists and user has access
+    // Verify property exists
     const property = await Property.findById(propertyId);
     if (!property) {
       return res.status(404).json({ message: 'Property not found' });
     }
 
-    const rooms = await Room.find({ propertyId })
+    let query = { propertyId };
+    
+    // If parentUnitId is provided, filter by it
+    if (parentUnitId) {
+      query.parentUnitId = parentUnitId;
+    }
+
+    const rooms = await Room.find(query)
       .populate('currentTenant', 'fullName email phone')
       .lean();
 
@@ -26,7 +59,7 @@ exports.getRoomsByProperty = async (req, res) => {
 
 exports.createRoom = async (req, res) => {
   try {
-    const { propertyId, roomNumber, type, occupancyType, capacity, monthlyPrice, description, amenities, utilities, images } = req.body;
+    const { propertyId, roomNumber, type, occupancyType, capacity, monthlyPrice, description, amenities, utilities, images, parentUnitId } = req.body;
 
     if (!propertyId || !roomNumber || monthlyPrice === undefined || monthlyPrice === null || !occupancyType) {
       return res.status(400).json({ message: 'Property ID, room number, price, and occupancy type are required' });
@@ -55,6 +88,7 @@ exports.createRoom = async (req, res) => {
       images: images || [],
       amenities: amenities || [],
       utilities: utilities || false,
+      parentUnitId: parentUnitId || null,
       isAvailable: true,
       status: 'available'
     });

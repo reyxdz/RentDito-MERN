@@ -4,6 +4,7 @@ import LandlordDashboard from './LandlordDashboard';
 import LocationsView from './LocationsView';
 import PropertyUnitsView from './PropertyUnitsView';
 import UnitDetailsPage from './UnitDetailsPage';
+import MultiUnitDetailsPage from './MultiUnitDetailsPage';
 import UnitsView from './UnitsView';
 import TenantsView from './TenantsView';
 import RoomsView from './RoomsView';
@@ -16,6 +17,7 @@ const LandlordLayout = () => {
       <Route path="/landlord/properties" element={<LocationsView />} />
       <Route path="/landlord/property/:propertyId/units" element={<PropertyUnitsView />} />
       <Route path="/landlord/property/:propertyId/unit/:unitId" element={<UnitDetailsPage />} />
+      <Route path="/landlord/property/:propertyId/multi-unit/:unitId" element={<MultiUnitDetailsPage />} />
       <Route path="/occupancy-types/:locationKey" element={<PropertyUnitsView />} />
       <Route path="/occupancy-types/:locationKey/units/:occupancyType" element={<UnitsView />} />
       <Route path="/occupancy-types/:locationKey/units/:occupancyType/tenants/:unitId" element={<TenantsView />} />

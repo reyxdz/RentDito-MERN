@@ -12,7 +12,7 @@ const roomSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ['single', 'double', 'dormitory'],
+    enum: ['single', 'double', 'dormitory', 'single-unit', 'multi-unit'],
     default: 'single'
   },
   occupancyType: {
@@ -31,6 +31,15 @@ const roomSchema = new mongoose.Schema({
   description: String,
   images: [String],
   amenities: [String],
+  utilities: {
+    type: Boolean,
+    default: false
+  },
+  parentUnitId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Room',
+    default: null
+  },
   isAvailable: {
     type: Boolean,
     default: true

@@ -231,7 +231,7 @@ const PropertyUnitsView = () => {
                   {multiUnits.map((unit) => (
                     <div
                       key={unit._id}
-                      onClick={() => navigate(`/dashboard/landlord/property/${propertyId}/unit/${unit._id}`)}
+                      onClick={() => navigate(`/dashboard/landlord/property/${propertyId}/multi-unit/${unit._id}`)}
                       className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl shadow-lg hover:shadow-2xl cursor-pointer transition-all p-6 text-white group"
                     >
                       <div className="flex items-start justify-between mb-4">

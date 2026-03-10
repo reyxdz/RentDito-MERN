@@ -1,6 +1,7 @@
 const express = require('express');
 const { body } = require('express-validator');
 const {
+  getAllRooms,
   getRoomsByProperty,
   createRoom,
   getRoom,
@@ -20,6 +21,9 @@ router.get('/search/available', searchAvailableRooms);
 // All other routes require authentication
 router.use(protect);
 
+// Get all rooms (with optional query parameters like parentUnitId)
+router.get('/', getAllRooms);
+
 // Get rooms by property
 router.get('/property/:propertyId', getRoomsByProperty);
 
@@ -30,7 +34,7 @@ router.post('/', authorize('landlord', 'landlord-admin'), [
   body('monthlyPrice').isNumeric().withMessage('Monthly price must be a number')
 ], createRoom);
 
-// Get specific room
+// Get specific room (MUST be after more specific routes)
 router.get('/:id', getRoom);
 
 // Update room (landlord/admin only)
