@@ -26,7 +26,7 @@ const PropertyForm = ({ onSuccess, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.address || !formData.barangay || !formData.municipality || !formData.city) {
+    if (!formData.name || !formData.barangay || !formData.municipality || !formData.city) {
       setError('Please fill in all required fields');
       return;
     }
@@ -78,20 +78,19 @@ const PropertyForm = ({ onSuccess, onClose }) => {
               label="Property Name *"
               type="text"
               name="name"
-              placeholder="e.g., Naval Kawayan, Biliran"
+              placeholder="e.g., Kawayan Boarding House"
               value={formData.name}
               onChange={handleChange}
               required
             />
 
             <Input
-              label="Address *"
+              label="Street"
               type="text"
               name="address"
               placeholder="e.g., 123 Main Street"
               value={formData.address}
               onChange={handleChange}
-              required
             />
 
             <div className="grid grid-cols-2 gap-4">
