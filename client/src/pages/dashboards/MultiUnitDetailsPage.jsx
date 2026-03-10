@@ -33,15 +33,17 @@ const MultiUnitDetailsPage = () => {
   ];
 
   const spaceTypeIcons = {
-    'single': <Bed className="text-blue-600" size={20} />,
-    'double': <Bed className="text-green-600" size={20} />,
+    'bedspace': <Bed className="text-blue-600" size={20} />,
+    'apartment': <Home className="text-green-600" size={20} />,
     'dormitory': <Users className="text-orange-600" size={20} />,
+    'room-for-rent': <Bed className="text-purple-600" size={20} />,
   };
 
   const spaceTypeColors = {
-    'single': 'from-blue-500 to-blue-600',
-    'double': 'from-green-500 to-green-600',
+    'bedspace': 'from-blue-500 to-blue-600',
+    'apartment': 'from-green-500 to-green-600',
     'dormitory': 'from-orange-500 to-orange-600',
+    'room-for-rent': 'from-purple-500 to-purple-600',
   };
 
   useEffect(() => {

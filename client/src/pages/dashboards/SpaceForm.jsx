@@ -19,9 +19,10 @@ const SpaceForm = ({ propertyId, parentUnitId, onSuccess, onClose }) => {
   const [imagePreviews, setImagePreviews] = useState([]);
 
   const spaceTypes = [
-    { value: 'single', label: 'Single Room' },
-    { value: 'double', label: 'Double Room' },
+    { value: 'bedspace', label: 'Bedspace' },
+    { value: 'apartment', label: 'Apartment' },
     { value: 'dormitory', label: 'Dormitory' },
+    { value: 'room-for-rent', label: 'Room for Rent' },
   ];
 
   const occupancyTypes = [

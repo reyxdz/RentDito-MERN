@@ -12,7 +12,7 @@ const roomSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ['single', 'double', 'dormitory', 'single-unit', 'multi-unit'],
+    enum: ['single', 'double', 'dormitory', 'single-unit', 'multi-unit', 'bedspace', 'apartment', 'room-for-rent'],
     default: 'single'
   },
   occupancyType: {
