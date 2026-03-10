@@ -147,7 +147,7 @@ const PropertyUnitsView = () => {
             </button>
             {propertyDetails && (
               <div>
-                <h3 className="text-3xl font-bold text-gray-900">{propertyDetails.name}</h3>
+                <h3 className="text-3xl font-bold text-gray-900">{propertyDetails.city}</h3>
                 <p className="text-gray-600 mt-2 flex items-center">
                   <MapPin size={18} className="mr-2" />
                   {propertyDetails.address && `${propertyDetails.address}, `}
