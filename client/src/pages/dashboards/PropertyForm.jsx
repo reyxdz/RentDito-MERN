@@ -3,6 +3,7 @@ import { Input, Alert } from '../../components/ui';
 import { X } from 'lucide-react';
 import axios from 'axios';
 
+// Location Form - v2
 const PropertyForm = ({ onSuccess, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
