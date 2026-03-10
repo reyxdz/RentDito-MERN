@@ -28,10 +28,10 @@ exports.getAllProperties = async (req, res) => {
 
 exports.createProperty = async (req, res) => {
   try {
-    const { name, description, address, city, state, postalCode, country, contact, amenities } = req.body;
+    const { name, description, address, barangay, municipality, city, state, postalCode, country, contact, amenities } = req.body;
 
-    if (!name || !address || !city) {
-      return res.status(400).json({ message: 'Name, address, and city are required' });
+    if (!name || !address || !barangay || !municipality || !city) {
+      return res.status(400).json({ message: 'Name, address, barangay, municipality, and city are required' });
     }
 
     const property = await Property.create({
@@ -39,6 +39,8 @@ exports.createProperty = async (req, res) => {
       name,
       description,
       address,
+      barangay,
+      municipality,
       city,
       state,
       postalCode,
@@ -87,7 +89,7 @@ exports.getProperty = async (req, res) => {
 exports.updateProperty = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, address, city, state, amenities, contact } = req.body;
+    const { name, description, address, barangay, municipality, city, state, amenities, contact } = req.body;
 
     const property = await Property.findById(id);
 
@@ -104,6 +106,8 @@ exports.updateProperty = async (req, res) => {
     if (name) property.name = name;
     if (description) property.description = description;
     if (address) property.address = address;
+    if (barangay) property.barangay = barangay;
+    if (municipality) property.municipality = municipality;
     if (city) property.city = city;
     if (state) property.state = state;
     if (amenities) property.amenities = amenities;

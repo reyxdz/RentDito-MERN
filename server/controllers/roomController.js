@@ -26,10 +26,10 @@ exports.getRoomsByProperty = async (req, res) => {
 
 exports.createRoom = async (req, res) => {
   try {
-    const { propertyId, roomNumber, type, capacity, monthlyPrice, description, amenities } = req.body;
+    const { propertyId, roomNumber, type, occupancyType, capacity, monthlyPrice, description, amenities } = req.body;
 
-    if (!propertyId || !roomNumber || !monthlyPrice) {
-      return res.status(400).json({ message: 'Property ID, room number, and price are required' });
+    if (!propertyId || !roomNumber || !monthlyPrice || !occupancyType) {
+      return res.status(400).json({ message: 'Property ID, room number, price, and occupancy type are required' });
     }
 
     // Verify property exists
@@ -48,6 +48,7 @@ exports.createRoom = async (req, res) => {
       propertyId,
       roomNumber,
       type: type || 'single',
+      occupancyType,
       capacity: capacity || 1,
       monthlyPrice,
       description,

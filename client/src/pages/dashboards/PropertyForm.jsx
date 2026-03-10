@@ -10,6 +10,8 @@ const PropertyForm = ({ onSuccess, onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
     address: '',
+    barangay: '',
+    municipality: '',
     city: '',
     state: '',
     description: '',
@@ -55,7 +57,7 @@ const PropertyForm = ({ onSuccess, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.address || !formData.city) {
+    if (!formData.name || !formData.address || !formData.barangay || !formData.municipality || !formData.city) {
       setError('Please fill in all required fields');
       return;
     }
@@ -82,8 +84,8 @@ const PropertyForm = ({ onSuccess, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+    <div className="fixed -top-10 left-0 w-screen h-[110vh] bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col -mt-20">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-6 flex items-center justify-between flex-shrink-0 rounded-t-2xl">
           <div>
@@ -135,11 +137,11 @@ const PropertyForm = ({ onSuccess, onClose }) => {
               />
 
               <Input
-                label="City *"
+                label="Barangay *"
                 type="text"
-                name="city"
-                placeholder="e.g., Manila"
-                value={formData.city}
+                name="barangay"
+                placeholder="e.g., Kawayan"
+                value={formData.barangay}
                 onChange={handleChange}
                 required
               />
@@ -147,12 +149,23 @@ const PropertyForm = ({ onSuccess, onClose }) => {
 
             <div className="grid grid-cols-2 gap-4">
               <Input
-                label="State/Province"
+                label="Municipality *"
                 type="text"
-                name="state"
-                placeholder="e.g., NCR"
-                value={formData.state}
+                name="municipality"
+                placeholder="e.g., Naval"
+                value={formData.municipality}
                 onChange={handleChange}
+                required
+              />
+
+              <Input
+                label="City *"
+                type="text"
+                name="city"
+                placeholder="e.g., Biliran"
+                value={formData.city}
+                onChange={handleChange}
+                required
               />
             </div>
 
