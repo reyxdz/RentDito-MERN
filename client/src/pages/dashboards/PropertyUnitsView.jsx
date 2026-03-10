@@ -21,6 +21,8 @@ const PropertyUnitsView = () => {
   const { propertyId } = useParams();
   const navigate = useNavigate();
   const [occupancyTypes, setOccupancyTypes] = useState([]);
+  const [singleUnits, setSingleUnits] = useState([]);
+  const [multiUnits, setMultiUnits] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [propertyDetails, setPropertyDetails] = useState(null);
@@ -76,50 +78,35 @@ const PropertyUnitsView = () => {
         const roomsResponse = await axios.get(`/api/properties/${propertyId}/rooms`);
         const rooms = roomsResponse.data.data || [];
 
-        // Group rooms by occupancy type
-        const occupancyMap = new Map();
-        const allOccupancyTypes = [
-          'Room for rent',
-          'House for rent',
-          'Apartment',
-          'Dormitory',
-          'Boarding House',
-        ];
+        // Separate single units and multi units
+        const single = rooms.filter((room) => room.type === 'single-unit');
+        const multi = rooms.filter((room) => room.type === 'multi-unit');
 
-        for (const occupancyType of allOccupancyTypes) {
-          occupancyMap.set(occupancyType, {
-            occupancyType,
-            totalUnits: 0,
-            totalTenants: 0,
-            units: [],
-          });
-        }
+        // Format single units
+        const formattedSingle = single.map((unit) => ({
+          ...unit,
+          isUnit: true,
+        }));
 
-        rooms.forEach((room) => {
-          if (occupancyMap.has(room.occupancyType)) {
-            const occupancyData = occupancyMap.get(room.occupancyType);
-            occupancyData.totalUnits += 1;
-            if (room.status === 'occupied' || room.currentTenant) {
-              occupancyData.totalTenants += 1;
-            }
-            occupancyData.units.push({
-              ...room,
-              propertyId: propertyId,
-              propertyName: property.name,
-            });
-          }
+        // Format multi units with count of child rooms
+        const formattedMulti = multi.map((unit) => {
+          // Count how many rooms belong to this multi-unit (child rooms will have different type)
+          const childRooms = rooms.filter((r) => 
+            r.parentUnitId === unit._id && r.type !== 'single-unit' && r.type !== 'multi-unit'
+          );
+          return {
+            ...unit,
+            isUnit: true,
+            childRoomsCount: childRooms.length,
+          };
         });
 
-        // Convert map to array and filter out empty occupancy types
-        const filteredOccupancyTypes = Array.from(occupancyMap.values()).filter(
-          (o) => o.totalUnits > 0
-        );
-
-        setOccupancyTypes(filteredOccupancyTypes);
+        setSingleUnits(formattedSingle);
+        setMultiUnits(formattedMulti);
       }
       setError(null);
     } catch (err) {
-      setError('Failed to load occupancy types');
+      setError('Failed to load units');
       console.error(err);
     } finally {
       setLoading(false);
@@ -192,81 +179,71 @@ const PropertyUnitsView = () => {
         {/* Loading State */}
         {loading ? (
           <div className="flex items-center justify-center h-64">
-            <p className="text-gray-500">Loading unit types...</p>
+            <p className="text-gray-500">Loading units...</p>
           </div>
-        ) : occupancyTypes.length === 0 ? (
+        ) : singleUnits.length === 0 && multiUnits.length === 0 ? (
           <div className="bg-white rounded-2xl shadow-sm p-12 text-center border border-gray-100">
             <Building2 size={48} className="mx-auto text-gray-400 mb-4" />
             <p className="text-gray-600 text-lg font-semibold">No units yet</p>
             <p className="text-gray-500">Add units to this property to get started</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {occupancyTypes.map((occType) => (
-              <div
-                key={occType.occupancyType}
-                onClick={() => handleOccupancyTypeClick(occType.occupancyType)}
-                className={`group bg-gradient-to-br ${occupancyColors[occType.occupancyType]} rounded-2xl shadow-lg hover:shadow-2xl cursor-pointer transition-all overflow-hidden`}
-              >
-                <div className="p-8 text-white">
-                  <div className="flex items-start justify-between mb-6">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center">
-                        {occupancyIcons[occType.occupancyType]}
+          <div className="space-y-8">
+            {/* Single Units Section */}
+            {singleUnits.length > 0 && (
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold text-gray-900">Single Units</h3>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {singleUnits.map((unit) => (
+                    <div
+                      key={unit._id}
+                      className="bg-white border border-gray-200 rounded-2xl shadow hover:shadow-lg transition-all p-6"
+                    >
+                      <div className="flex items-start justify-between mb-4">
+                        <div>
+                          <p className="text-sm text-gray-600">Complete Unit</p>
+                          <h4 className="text-xl font-bold text-gray-900 mt-1">${unit.monthlyPrice}/month</h4>
+                        </div>
+                        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-100">
+                          <Home className="text-blue-600" size={20} />
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="text-2xl font-bold">{occType.occupancyType}</h4>
-                        <p className="text-white/80 text-sm mt-1">
-                          {occType.totalUnits} {occType.totalUnits === 1 ? 'unit' : 'units'}
-                        </p>
+                      <div className="space-y-2 text-sm text-gray-600">
+                        <p><strong>Capacity:</strong> {unit.capacity} {unit.capacity === 1 ? 'person' : 'persons'}</p>
+                        {unit.utilities && <p>✓ Utilities Included</p>}
                       </div>
                     </div>
-                    <ArrowRight
-                      size={24}
-                      className="group-hover:translate-x-1 transition-transform flex-shrink-0"
-                    />
-                  </div>
-
-                  {/* Occupancy Rate */}
-                  <div className="mt-6">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-white/80 text-sm font-medium">Occupancy</span>
-                      <span className="text-white font-semibold">
-                        {occType.totalUnits > 0
-                          ? Math.round((occType.totalTenants / occType.totalUnits) * 100)
-                          : 0}
-                        %
-                      </span>
-                    </div>
-                    <div className="w-full h-2 bg-white/20 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-white/60 rounded-full transition-all"
-                        style={{
-                          width:
-                            occType.totalUnits > 0
-                              ? `${(occType.totalTenants / occType.totalUnits) * 100}%`
-                              : '0%',
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Stats */}
-                  <div className="grid grid-cols-2 gap-4 mt-6 pt-6 border-t border-white/20">
-                    <div>
-                      <p className="text-white/80 text-sm">Occupied</p>
-                      <p className="text-2xl font-bold text-white mt-1">{occType.totalTenants}</p>
-                    </div>
-                    <div>
-                      <p className="text-white/80 text-sm">Available</p>
-                      <p className="text-2xl font-bold text-white mt-1">
-                        {occType.totalUnits - occType.totalTenants}
-                      </p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
-            ))}
+            )}
+
+            {/* Multi Units Section */}
+            {multiUnits.length > 0 && (
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold text-gray-900">Multi Units</h3>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {multiUnits.map((unit) => (
+                    <div
+                      key={unit._id}
+                      className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl shadow-lg hover:shadow-2xl cursor-pointer transition-all p-6 text-white"
+                    >
+                      <div className="flex items-start justify-between mb-4">
+                        <div>
+                          <h4 className="text-2xl font-bold">{unit.roomNumber}</h4>
+                          <p className="text-purple-100 text-sm mt-1">{unit.description}</p>
+                        </div>
+                        <ArrowRight size={24} className="flex-shrink-0" />
+                      </div>
+                      <div className="mt-4 pt-4 border-t border-white/20">
+                        <p className="text-2xl font-bold">{unit.childRoomsCount}</p>
+                        <p className="text-purple-100 text-sm">spaces available</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

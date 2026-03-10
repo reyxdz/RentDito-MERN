@@ -75,7 +75,7 @@ const UnitForm = ({ propertyId, onSuccess, onClose }) => {
 
         const roomData = {
           propertyId,
-          roomNumber: propertyId, // Use propertyId as room identifier for single unit
+          roomNumber: `single-unit-${Date.now()}`, // Unique identifier for single unit
           capacity: parseInt(formData.capacity),
           monthlyPrice: parseFloat(formData.monthlyRent),
           images: images,
@@ -83,6 +83,7 @@ const UnitForm = ({ propertyId, onSuccess, onClose }) => {
           amenities: amenities.split(',').map(a => a.trim()).filter(a => a),
           description: amenities, // Store amenities as description for now
           occupancyType: 'Room for rent',
+          type: 'single-unit', // Mark as single unit type
         };
 
         const response = await axios.post('/api/rooms', roomData);
@@ -105,6 +106,7 @@ const UnitForm = ({ propertyId, onSuccess, onClose }) => {
           images: images,
           monthlyPrice: 0,
           occupancyType: 'Room for rent',
+          type: 'multi-unit', // Mark as multi unit type
         };
 
         const response = await axios.post('/api/rooms', roomData);
