@@ -5,7 +5,7 @@ import {
   MapPin,
   ArrowLeft,
   Bed,
-  Door,
+  Layers,
   DollarSign,
   Users,
   CheckCircle,
@@ -183,7 +183,7 @@ const RoomsView = () => {
             {/* Rooms Grid */}
             {rooms.length === 0 ? (
               <div className="bg-white rounded-2xl shadow-sm p-12 text-center border border-gray-100">
-                <Door size={48} className="mx-auto text-gray-400 mb-4" />
+                <Layers size={48} className="mx-auto text-gray-400 mb-4" />
                 <p className="text-gray-600 text-lg font-semibold">No rooms</p>
                 <p className="text-gray-500">This boarding house has no rooms</p>
               </div>
@@ -199,7 +199,7 @@ const RoomsView = () => {
                           {rooms.length}
                         </p>
                       </div>
-                      <Door className="text-blue-600" size={32} />
+                      <Layers className="text-blue-600" size={32} />
                     </div>
                   </div>
 
