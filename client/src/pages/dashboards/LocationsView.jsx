@@ -165,7 +165,7 @@ const LocationsView = () => {
 
                 {/* Stats */}
                 <div className="p-6 border-t border-gray-100">
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-2 gap-4">
                     <div className="text-center">
                       <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-blue-100 mx-auto mb-2">
                         <Home className="text-blue-600" size={24} />
@@ -185,41 +185,9 @@ const LocationsView = () => {
                       </p>
                       <p className="text-sm text-gray-600">Tenants</p>
                     </div>
-
-                    <div className="text-center">
-                      <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-purple-100 mx-auto mb-2">
-                        <Building2 className="text-purple-600" size={24} />
-                      </div>
-                      <p className="text-2xl font-bold text-gray-900">
-                        {location.properties.length}
-                      </p>
-                      <p className="text-sm text-gray-600">Properties</p>
-                    </div>
                   </div>
                 </div>
 
-                {/* Properties list */}
-                <div className="px-6 pb-6 border-t border-gray-100">
-                  <p className="text-xs font-semibold text-gray-600 uppercase mb-3">
-                    Properties in this location
-                  </p>
-                  <div className="space-y-2">
-                    {location.properties.slice(0, 3).map((property) => (
-                      <div
-                        key={property._id}
-                        className="text-sm text-gray-700 bg-gray-50 rounded px-3 py-2"
-                      >
-                        {property.name}
-                      </div>
-                    ))}
-                    {location.properties.length > 3 && (
-                      <p className="text-sm text-gray-600 italic">
-                        +{location.properties.length - 3} more property
-                        {location.properties.length - 3 !== 1 ? 'ies' : ''}
-                      </p>
-                    )}
-                  </div>
-                </div>
               </div>
             ))}
           </div>
