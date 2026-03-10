@@ -16,7 +16,6 @@ const UnitForm = ({ propertyId, onSuccess, onClose }) => {
     capacity: '',
     // Multi unit fields
     unitName: '',
-    multiCapacity: '',
     description: '',
   });
 
@@ -93,20 +92,15 @@ const UnitForm = ({ propertyId, onSuccess, onClose }) => {
         }
       } else if (unitType === 'multi') {
         // Multi unit flow
-        if (!formData.unitName || !formData.multiCapacity) {
+        if (!formData.unitName || !formData.description) {
           setError('Please fill in all required fields');
-          return;
-        }
-
-        if (parseInt(formData.multiCapacity) < 1) {
-          setError('How many rooms must be at least 1');
           return;
         }
 
         const roomData = {
           propertyId,
           roomNumber: formData.unitName,
-          capacity: parseInt(formData.multiCapacity),
+          capacity: 0, // Will be calculated based on added rooms
           description: formData.description,
           images: images,
           monthlyPrice: 0,
@@ -253,6 +247,10 @@ const UnitForm = ({ propertyId, onSuccess, onClose }) => {
                 </button>
               </div>
 
+              <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-sm text-blue-700">The number of spaces will be automatically calculated based on how many individual rooms/spaces you add to this unit.</p>
+              </div>
+
               <Input
                 label="Unit Name *"
                 type="text"
@@ -261,17 +259,6 @@ const UnitForm = ({ propertyId, onSuccess, onClose }) => {
                 value={formData.unitName}
                 onChange={handleChange}
                 required
-              />
-
-              <Input
-                label="How many rooms/spaces *"
-                type="number"
-                name="multiCapacity"
-                placeholder="e.g., 1, 2, 3"
-                value={formData.multiCapacity}
-                onChange={handleChange}
-                required
-                min="1"
               />
 
               <div>
