@@ -121,12 +121,12 @@ const LocationsView = () => {
                 onClick={() => handlePropertyCardClick(property._id)}
                 className="group bg-white rounded-2xl border border-gray-200 hover:border-blue-300 overflow-hidden cursor-pointer transition-all hover:shadow-lg"
               >
-                {/* Header with Property Name */}
+                {/* Header with City */}
                 <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-6 text-white">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <h4 className="text-xl font-bold">{property.name}</h4>
-                      <p className="text-blue-100 text-sm mt-2 space-y-1">
+                      <h4 className="text-3xl font-bold">{property.city}</h4>
+                      <p className="text-blue-100 text-sm mt-2">
                         <div className="flex items-start">
                           <MapPin size={14} className="mr-2 mt-0.5 flex-shrink-0" />
                           <span>{property.address && `${property.address}, `}{property.barangay}, {property.municipality}, {property.city}</span>
