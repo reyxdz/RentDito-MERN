@@ -5,6 +5,7 @@ const User = require('../models/User');
 exports.getAllPayments = async (req, res) => {
   try {
     const { role, _id } = req.user;
+    const { roomId } = req.query;
     let query = {};
 
     if (role === 'tenant') {
@@ -14,6 +15,14 @@ exports.getAllPayments = async (req, res) => {
     } else if (role === 'landlord-admin') {
       // Get payments for properties managed by this admin
       query.propertyId = { $in: req.user.adminDetails.assignedProperties };
+    }
+
+    // Filter by room if roomId is provided
+    if (roomId) {
+      // Find all leases for this room and get their IDs
+      const leases = await Lease.find({ roomId }).select('_id');
+      const leaseIds = leases.map(lease => lease._id);
+      query.leaseId = { $in: leaseIds };
     }
 
     const payments = await Payment.find(query)

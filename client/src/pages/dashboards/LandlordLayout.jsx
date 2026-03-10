@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import LandlordDashboard from './LandlordDashboard';
 import LocationsView from './LocationsView';
 import PropertyUnitsView from './PropertyUnitsView';
+import UnitDetailsPage from './UnitDetailsPage';
 import UnitsView from './UnitsView';
 import TenantsView from './TenantsView';
 import RoomsView from './RoomsView';
@@ -14,6 +15,7 @@ const LandlordLayout = () => {
       <Route path="/landlord" element={<LandlordDashboard />} />
       <Route path="/landlord/properties" element={<LocationsView />} />
       <Route path="/landlord/property/:propertyId/units" element={<PropertyUnitsView />} />
+      <Route path="/landlord/property/:propertyId/unit/:unitId" element={<UnitDetailsPage />} />
       <Route path="/occupancy-types/:locationKey" element={<PropertyUnitsView />} />
       <Route path="/occupancy-types/:locationKey/units/:occupancyType" element={<UnitsView />} />
       <Route path="/occupancy-types/:locationKey/units/:occupancyType/tenants/:unitId" element={<TenantsView />} />

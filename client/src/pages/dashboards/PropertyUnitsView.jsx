@@ -197,20 +197,25 @@ const PropertyUnitsView = () => {
                   {singleUnits.map((unit) => (
                     <div
                       key={unit._id}
-                      className="bg-white border border-gray-200 rounded-2xl shadow hover:shadow-lg transition-all p-6"
+                      onClick={() => navigate(`/landlord/property/${propertyId}/unit/${unit._id}`)}
+                      className="bg-white border border-gray-200 rounded-2xl shadow hover:shadow-lg hover:border-blue-300 transition-all p-6 cursor-pointer group"
                     >
                       <div className="flex items-start justify-between mb-4">
                         <div>
                           <p className="text-sm text-gray-600">Complete Unit</p>
                           <h4 className="text-xl font-bold text-gray-900 mt-1">${unit.monthlyPrice}/month</h4>
                         </div>
-                        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-100">
+                        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-100 group-hover:bg-blue-200 transition-colors">
                           <Home className="text-blue-600" size={20} />
                         </div>
                       </div>
                       <div className="space-y-2 text-sm text-gray-600">
                         <p><strong>Capacity:</strong> {unit.capacity} {unit.capacity === 1 ? 'person' : 'persons'}</p>
-                        {unit.utilities && <p>✓ Utilities Included</p>}
+                        {unit.utilities && <p className="text-green-600">✓ Utilities Included</p>}
+                      </div>
+                      <div className="mt-4 pt-4 border-t border-gray-100 flex items-center text-blue-600 text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span>View Details</span>
+                        <ArrowRight size={16} className="ml-2" />
                       </div>
                     </div>
                   ))}
@@ -226,14 +231,15 @@ const PropertyUnitsView = () => {
                   {multiUnits.map((unit) => (
                     <div
                       key={unit._id}
-                      className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl shadow-lg hover:shadow-2xl cursor-pointer transition-all p-6 text-white"
+                      onClick={() => navigate(`/landlord/property/${propertyId}/unit/${unit._id}`)}
+                      className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl shadow-lg hover:shadow-2xl cursor-pointer transition-all p-6 text-white group"
                     >
                       <div className="flex items-start justify-between mb-4">
                         <div>
                           <h4 className="text-2xl font-bold">{unit.roomNumber}</h4>
                           <p className="text-purple-100 text-sm mt-1">{unit.description}</p>
                         </div>
-                        <ArrowRight size={24} className="flex-shrink-0" />
+                        <ArrowRight size={24} className="flex-shrink-0 group-hover:translate-x-1 transition-transform" />
                       </div>
                       <div className="mt-4 pt-4 border-t border-white/20">
                         <p className="text-2xl font-bold">{unit.childRoomsCount}</p>
