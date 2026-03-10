@@ -86,7 +86,7 @@ const UnitDetailsPage = () => {
   };
 
   const handleBack = () => {
-    navigate(`/landlord/property/${propertyId}/units`);
+    navigate(`/dashboard/landlord/property/${propertyId}/units`);
   };
 
   const getPaymentStatus = () => {
