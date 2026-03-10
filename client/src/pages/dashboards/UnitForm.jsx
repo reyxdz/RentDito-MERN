@@ -10,7 +10,6 @@ const UnitForm = ({ propertyId, onSuccess, onClose }) => {
   const [formData, setFormData] = useState({
     unitName: '',
     capacity: '',
-    monthlyPrice: '',
     description: '',
   });
 
@@ -47,18 +46,13 @@ const UnitForm = ({ propertyId, onSuccess, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.unitName || !formData.capacity || !formData.monthlyPrice || !formData.description) {
+    if (!formData.unitName || !formData.capacity || !formData.description) {
       setError('Please fill in all required fields');
       return;
     }
 
     if (parseInt(formData.capacity) < 1) {
       setError('Capacity must be at least 1');
-      return;
-    }
-
-    if (parseFloat(formData.monthlyPrice) < 0) {
-      setError('Monthly price must be greater than or equal to 0');
       return;
     }
 
@@ -73,7 +67,7 @@ const UnitForm = ({ propertyId, onSuccess, onClose }) => {
         capacity: parseInt(formData.capacity),
         description: formData.description,
         images: images,
-        monthlyPrice: parseFloat(formData.monthlyPrice),
+        monthlyPrice: 0, // Default value, will be set per room later
         occupancyType: 'Room for rent', // Default, can be updated later
       };
 
@@ -96,7 +90,7 @@ const UnitForm = ({ propertyId, onSuccess, onClose }) => {
         <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-6 flex items-center justify-between flex-shrink-0">
           <div>
             <h2 className="text-3xl font-bold text-white">Add New Unit</h2>
-            <p className="text-blue-100 text-sm mt-1">Create a new unit in this property</p>
+            <p className="text-blue-100 text-sm mt-1">Create a unit (you'll set room prices next)</p>
           </div>
           <button
             onClick={onClose}
@@ -135,18 +129,6 @@ const UnitForm = ({ propertyId, onSuccess, onClose }) => {
               onChange={handleChange}
               required
               min="1"
-            />
-
-            <Input
-              label="Monthly Price *"
-              type="number"
-              name="monthlyPrice"
-              placeholder="e.g., 5000"
-              value={formData.monthlyPrice}
-              onChange={handleChange}
-              required
-              min="0"
-              step="0.01"
             />
 
             <div>
