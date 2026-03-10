@@ -11,9 +11,11 @@ import {
   DollarSign,
   Bed,
   ArrowRight,
+  Plus,
 } from 'lucide-react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import UnitForm from './UnitForm';
 
 const PropertyUnitsView = () => {
   const { propertyId } = useParams();
@@ -22,6 +24,7 @@ const PropertyUnitsView = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [propertyDetails, setPropertyDetails] = useState(null);
+  const [showForm, setShowForm] = useState(false);
 
   const sidebarItems = [
     { label: 'Dashboard', path: '/dashboard/landlord', icon: <Building2 size={20} /> },
@@ -133,6 +136,11 @@ const PropertyUnitsView = () => {
     navigate('/dashboard/landlord/properties');
   };
 
+  const handleUnitCreated = () => {
+    setShowForm(false);
+    fetchOccupancyTypes();
+  };
+
   return (
     <DashboardLayout sidebarItems={sidebarItems}>
       <div className="space-y-8">
@@ -156,7 +164,23 @@ const PropertyUnitsView = () => {
               </div>
             )}
           </div>
+          <button
+            onClick={() => setShowForm(true)}
+            className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-md hover:shadow-lg"
+          >
+            <Plus size={20} />
+            <span>Add Unit</span>
+          </button>
         </div>
+
+        {/* Form Modal */}
+        {showForm && (
+          <UnitForm
+            propertyId={propertyId}
+            onSuccess={handleUnitCreated}
+            onClose={() => setShowForm(false)}
+          />
+        )}
 
         {/* Error Alert */}
         {error && (
