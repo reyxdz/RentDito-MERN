@@ -58,8 +58,8 @@ const LocationsView = () => {
     fetchLocations();
   };
 
-  const handlePropertyCardClick = (locationKey) => {
-    navigate(`/dashboard/landlord/occupancy-types/${encodeURIComponent(locationKey)}`);
+  const handlePropertyCardClick = (propertyId) => {
+    navigate(`/dashboard/landlord/property/${propertyId}/units`);
   };
 
   return (
@@ -118,7 +118,7 @@ const LocationsView = () => {
             {locations.map((property) => (
               <div
                 key={property._id}
-                onClick={() => handlePropertyCardClick(property.locationKey)}
+                onClick={() => handlePropertyCardClick(property._id)}
                 className="group bg-white rounded-2xl border border-gray-200 hover:border-blue-300 overflow-hidden cursor-pointer transition-all hover:shadow-lg"
               >
                 {/* Header with Property Name */}

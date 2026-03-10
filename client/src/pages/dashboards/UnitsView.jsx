@@ -43,11 +43,22 @@ const UnitsView = () => {
       const response = await axios.get('/api/properties');
       const properties = response.data.data || [];
 
-      // Filter properties for this location
-      const locationProperties = properties.filter((prop) => {
-        const propLocation = `${prop.municipality}, ${prop.barangay}, ${prop.city}`;
-        return propLocation === decodedLocation;
-      });
+      let locationProperties = [];
+
+      // Check if this is a property-based route
+      if (decodedLocation.startsWith('property-')) {
+        const propertyId = decodedLocation.replace('property-', '');
+        const property = properties.find((p) => p._id === propertyId);
+        if (property) {
+          locationProperties = [property];
+        }
+      } else {
+        // Original location-based route
+        locationProperties = properties.filter((prop) => {
+          const propLocation = `${prop.municipality}, ${prop.barangay}, ${prop.city}`;
+          return propLocation === decodedLocation;
+        });
+      }
 
       // Extract location details
       if (locationProperties.length > 0) {
