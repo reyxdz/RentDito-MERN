@@ -26,9 +26,7 @@ router.post('/', authorize('landlord'), [
   body('city').notEmpty().withMessage('City is required')
 ], createProperty);
 
-// Get specific property
-router.get('/:id', getProperty);
-
+// More specific routes before generic :id route
 // Get rooms for a property
 router.get('/:id/rooms', async (req, res) => {
   try {
@@ -47,6 +45,10 @@ router.get('/:id/rooms', async (req, res) => {
 
 // Get property stats
 router.get('/:id/stats', getPropertyStats);
+
+// Generic :id routes after specific routes
+// Get specific property
+router.get('/:id', getProperty);
 
 // Update property (landlord/admin only)
 router.put('/:id', authorize('landlord', 'landlord-admin'), checkPropertyAccess, updateProperty);
