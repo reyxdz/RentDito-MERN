@@ -173,21 +173,6 @@ const MultiUnitDetailsPage = () => {
           </div>
         )}
 
-        {/* Multi-Unit Information */}
-        <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
-          <h3 className="text-lg font-bold text-gray-900 mb-4">Multi-Unit Information</h3>
-          <div className="grid grid-cols-2 gap-6">
-            <div>
-              <p className="text-sm text-gray-600 mb-2">Description</p>
-              <p className="font-semibold text-gray-900">{multiUnit.description || 'No description'}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600 mb-2">Occupancy Type</p>
-              <p className="font-semibold text-gray-900">{multiUnit.occupancyType}</p>
-            </div>
-          </div>
-        </div>
-
         {/* Spaces Section */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">

@@ -8,6 +8,7 @@ const SpaceForm = ({ propertyId, parentUnitId, onSuccess, onClose }) => {
   const [formData, setFormData] = useState({
     spaceName: '',
     type: 'single',
+    occupancyType: 'Room for rent',
     capacity: 1,
     monthlyPrice: 0,
     description: '',
@@ -21,6 +22,14 @@ const SpaceForm = ({ propertyId, parentUnitId, onSuccess, onClose }) => {
     { value: 'single', label: 'Single Room' },
     { value: 'double', label: 'Double Room' },
     { value: 'dormitory', label: 'Dormitory' },
+  ];
+
+  const occupancyTypes = [
+    { value: 'Room for rent', label: 'Room for rent' },
+    { value: 'House for rent', label: 'House for rent' },
+    { value: 'Apartment', label: 'Apartment' },
+    { value: 'Dormitory', label: 'Dormitory' },
+    { value: 'Boarding House', label: 'Boarding House' },
   ];
 
   const handleInputChange = (e) => {
@@ -116,7 +125,7 @@ const SpaceForm = ({ propertyId, parentUnitId, onSuccess, onClose }) => {
         propertyId,
         roomNumber: formData.spaceName,
         type: formData.type,
-        occupancyType: 'Room for rent',
+        occupancyType: formData.occupancyType,
         capacity: formData.capacity,
         monthlyPrice: formData.monthlyPrice,
         description: formData.description,
@@ -175,8 +184,8 @@ const SpaceForm = ({ propertyId, parentUnitId, onSuccess, onClose }) => {
             />
           </div>
 
-          {/* Type and Capacity */}
-          <div className="grid grid-cols-2 gap-4">
+          {/* Type, Capacity, and Occupancy Type */}
+          <div className="grid grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Space Type *
@@ -207,6 +216,24 @@ const SpaceForm = ({ propertyId, parentUnitId, onSuccess, onClose }) => {
                 min="1"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Occupancy Type *
+              </label>
+              <select
+                name="occupancyType"
+                value={formData.occupancyType}
+                onChange={handleInputChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              >
+                {occupancyTypes.map((t) => (
+                  <option key={t.value} value={t.value}>
+                    {t.label}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
