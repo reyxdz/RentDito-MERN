@@ -26,7 +26,7 @@ exports.getRoomsByProperty = async (req, res) => {
 
 exports.createRoom = async (req, res) => {
   try {
-    const { propertyId, roomNumber, type, occupancyType, capacity, monthlyPrice, description, amenities } = req.body;
+    const { propertyId, roomNumber, type, occupancyType, capacity, monthlyPrice, description, amenities, utilities, images } = req.body;
 
     if (!propertyId || !roomNumber || monthlyPrice === undefined || monthlyPrice === null || !occupancyType) {
       return res.status(400).json({ message: 'Property ID, room number, price, and occupancy type are required' });
@@ -52,7 +52,9 @@ exports.createRoom = async (req, res) => {
       capacity: capacity || 1,
       monthlyPrice,
       description,
+      images: images || [],
       amenities: amenities || [],
+      utilities: utilities || false,
       isAvailable: true,
       status: 'available'
     });
