@@ -9,6 +9,8 @@ const PropertyForm = ({ onSuccess, onClose }) => {
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
+    code: '',
+    type: '',
     address: '',
     barangay: '',
     municipality: '',
@@ -26,7 +28,8 @@ const PropertyForm = ({ onSuccess, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.barangay || !formData.municipality || !formData.city) {
+
+    if (!formData.name || !formData.code || !formData.type || !formData.barangay || !formData.municipality || !formData.city) {
       setError('Please fill in all required fields');
       return;
     }
@@ -78,17 +81,46 @@ const PropertyForm = ({ onSuccess, onClose }) => {
               label="Property Name *"
               type="text"
               name="name"
-              placeholder="e.g., Kawayan Boarding House"
+              placeholder="e.g., White Dorm"
               value={formData.name}
               onChange={handleChange}
               required
             />
 
             <Input
+              label="Property Code *"
+              type="text"
+              name="code"
+              placeholder="e.g., BH 3"
+              value={formData.code}
+              onChange={handleChange}
+              required
+            />
+
+            <div>
+              <label className="block text-sm font-medium mb-2">Property Type *</label>
+              <select
+                name="type"
+                value={formData.type}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 border-gray-300"
+              >
+                <option value="" disabled>Select property type</option>
+                <option value="Boarding House">Boarding House</option>
+                <option value="Apartment">Apartment</option>
+                <option value="Dormitory">Dormitory</option>
+                <option value="Condo">Condo</option>
+                <option value="House for Rent">House for Rent</option>
+                <option value="Room for Rent">Room for Rent</option>
+              </select>
+            </div>
+
+            <Input
               label="Street"
               type="text"
               name="address"
-              placeholder="e.g., 123 Main Street"
+              placeholder="e.g., Sikatuna Street"
               value={formData.address}
               onChange={handleChange}
             />
@@ -98,7 +130,7 @@ const PropertyForm = ({ onSuccess, onClose }) => {
                 label="Barangay *"
                 type="text"
                 name="barangay"
-                placeholder="e.g., Kawayan"
+                placeholder="e.g., Zapatera"
                 value={formData.barangay}
                 onChange={handleChange}
                 required
@@ -108,7 +140,7 @@ const PropertyForm = ({ onSuccess, onClose }) => {
                 label="Municipality *"
                 type="text"
                 name="municipality"
-                placeholder="e.g., Naval"
+                placeholder="e.g., Cebu City"
                 value={formData.municipality}
                 onChange={handleChange}
                 required
@@ -116,10 +148,10 @@ const PropertyForm = ({ onSuccess, onClose }) => {
             </div>
 
             <Input
-              label="City *"
+              label="Province *"
               type="text"
               name="city"
-              placeholder="e.g., Biliran"
+              placeholder="e.g., Cebu"
               value={formData.city}
               onChange={handleChange}
               required
