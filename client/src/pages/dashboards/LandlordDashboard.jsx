@@ -39,6 +39,8 @@ const LandlordDashboard = () => {
         </div>
 
         {/* Stats */}
+
+        {/* Stats Row 1 */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <Card>
             <div className="flex items-start justify-between">
@@ -81,6 +83,30 @@ const LandlordDashboard = () => {
                 <p className="text-blue-600 text-xs mt-1">30/30 rooms</p>
               </div>
               <CreditCard className="text-orange-600" size={32} />
+            </div>
+          </Card>
+        </div>
+
+        {/* Stats Row 2: Additional Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mt-2">
+          <Card>
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-gray-600 text-sm">Pending Monthly Rents</p>
+                <h4 className="text-3xl font-bold mt-2">₱12,000</h4>
+                <p className="text-red-600 text-xs mt-1">5 tenants pending</p>
+              </div>
+              <CreditCard className="text-red-500" size={32} />
+            </div>
+          </Card>
+          <Card>
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-gray-600 text-sm">Pending Utility Payments</p>
+                <h4 className="text-3xl font-bold mt-2">₱3,500</h4>
+                <p className="text-yellow-600 text-xs mt-1">3 tenants pending</p>
+              </div>
+              <CreditCard className="text-yellow-500" size={32} />
             </div>
           </Card>
         </div>
