@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DashboardLayout } from '../../components/layouts/DashboardLayout';
-import { Building2, MapPin, Users, Home, DollarSign, Plus, ArrowRight } from 'lucide-react';
+import { Building2, MapPin, Users, Home, DollarSign, Plus, ArrowRight, Edit, Trash2 } from 'lucide-react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import PropertyForm from './PropertyForm';
@@ -60,6 +60,22 @@ const LocationsView = () => {
 
   const handlePropertyCardClick = (propertyId) => {
     navigate(`/dashboard/landlord/property/${propertyId}/units`);
+  };
+
+  const handleDeleteProperty = async (e, propertyId) => {
+    e.stopPropagation();
+    
+    if (!window.confirm('Are you sure you want to delete this property?')) {
+      return;
+    }
+
+    try {
+      await axios.delete(`/api/properties/${propertyId}`);
+      fetchLocations();
+    } catch (error) {
+      setError('Failed to delete property');
+      console.error(error);
+    }
   };
 
   return (
@@ -166,6 +182,24 @@ const LocationsView = () => {
                       <p className="text-sm text-gray-600">Tenants</p>
                     </div>
                   </div>
+                </div>
+
+                {/* Action Icons */}
+                <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-end gap-3">
+                  <button
+                    onClick={(e) => e.stopPropagation()}
+                    className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                    title="Edit property"
+                  >
+                    <Edit size={20} />
+                  </button>
+                  <button
+                    onClick={(e) => handleDeleteProperty(e, property._id)}
+                    className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    title="Delete property"
+                  >
+                    <Trash2 size={20} />
+                  </button>
                 </div>
 
               </div>
