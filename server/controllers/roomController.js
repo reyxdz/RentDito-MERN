@@ -59,7 +59,7 @@ exports.getRoomsByProperty = async (req, res) => {
 
 exports.createRoom = async (req, res) => {
   try {
-    const { propertyId, roomNumber, capacity, monthlyPrice, description, amenities, utilities, utilitiesTypes, images, parentUnitId } = req.body;
+    const { propertyId, roomNumber, capacity, monthlyPrice, description, amenities, utilitiesTypes, images, parentUnitId } = req.body;
 
     if (!propertyId || !roomNumber || monthlyPrice === undefined || monthlyPrice === null) {
       return res.status(400).json({ message: 'Property ID, room number, and price are required' });
@@ -86,7 +86,7 @@ exports.createRoom = async (req, res) => {
       images: images || [],
       amenities: amenities || [],
       utilities: {
-        included: !!utilities,
+        included: Array.isArray(utilitiesTypes) && utilitiesTypes.length > 0,
         types: Array.isArray(utilitiesTypes) ? utilitiesTypes : [],
       },
       parentUnitId: parentUnitId || null,
@@ -132,7 +132,7 @@ exports.getRoom = async (req, res) => {
 exports.updateRoom = async (req, res) => {
   try {
     const { id } = req.params;
-    const { capacity, monthlyPrice, description, amenities, status, utilities, utilitiesTypes } = req.body;
+    const { capacity, monthlyPrice, description, amenities, status, utilitiesTypes } = req.body;
 
     const room = await Room.findById(id);
     if (!room) {
@@ -144,8 +144,8 @@ exports.updateRoom = async (req, res) => {
     if (monthlyPrice) room.monthlyPrice = monthlyPrice;
     if (description) room.description = description;
     if (amenities) room.amenities = amenities;
-    if (typeof utilities !== 'undefined') {
-      room.utilities.included = !!utilities;
+    if (typeof utilitiesTypes !== 'undefined') {
+      room.utilities.included = Array.isArray(utilitiesTypes) && utilitiesTypes.length > 0;
       room.utilities.types = Array.isArray(utilitiesTypes) ? utilitiesTypes : [];
     }
     if (status) {
