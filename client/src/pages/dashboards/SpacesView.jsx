@@ -152,7 +152,11 @@ const SpacesView = () => {
             {spaces.map((space) => (
               <div
                 key={space._id}
-                className="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg transition-all overflow-hidden"
+                className="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg transition-all overflow-hidden cursor-pointer"
+                onClick={() => navigate(`/dashboard/landlord/space/${space._id}`)}
+                tabIndex={0}
+                role="button"
+                onKeyDown={e => { if (e.key === 'Enter') navigate(`/dashboard/landlord/space/${space._id}`); }}
               >
                 {/* Space Header */}
                 <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-6 text-white">
@@ -160,14 +164,14 @@ const SpacesView = () => {
                     <h4 className="text-2xl font-bold">{space.roomName || space.roomNumber || 'Space'}</h4>
                     <div className="flex gap-2">
                       <button
-                        onClick={() => {}}
+                        onClick={e => { e.stopPropagation(); }}
                         className="p-2 hover:bg-white/20 rounded-lg transition-colors"
                         title="Edit"
                       >
                         <Edit size={18} />
                       </button>
                       <button
-                        onClick={() => handleDeleteSpace(space._id)}
+                        onClick={e => { e.stopPropagation(); handleDeleteSpace(space._id); }}
                         className="p-2 hover:bg-red-500/20 rounded-lg transition-colors"
                         title="Delete"
                       >
