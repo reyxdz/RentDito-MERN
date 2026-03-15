@@ -11,6 +11,7 @@ const SpaceForm = ({ propertyId, parentUnitId, onSuccess, onClose }) => {
     monthlyPrice: 0,
     description: '',
     utilities: false,
+    utilitiesTypes: [],
     amenities: '',
     images: [],
   });
@@ -20,10 +21,23 @@ const SpaceForm = ({ propertyId, parentUnitId, onSuccess, onClose }) => {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : type === 'number' ? parseInt(value) || 0 : value,
-    }));
+    if (name === 'utilitiesTypes') {
+      // Handle utilities type checkboxes
+      setFormData((prev) => {
+        let updatedTypes = prev.utilitiesTypes || [];
+        if (checked) {
+          updatedTypes = [...updatedTypes, value];
+        } else {
+          updatedTypes = updatedTypes.filter((t) => t !== value);
+        }
+        return { ...prev, utilitiesTypes: updatedTypes };
+      });
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: type === 'checkbox' ? checked : type === 'number' ? parseInt(value) || 0 : value,
+      }));
+    }
   };
 
   const handleImageUpload = (e) => {
@@ -114,6 +128,7 @@ const SpaceForm = ({ propertyId, parentUnitId, onSuccess, onClose }) => {
         monthlyPrice: formData.monthlyPrice,
         description: formData.description,
         utilities: formData.utilities,
+        utilitiesTypes: formData.utilities ? formData.utilitiesTypes : [],
         amenities: amenitiesArray,
         images: imageUrls,
         parentUnitId: parentUnitId,
@@ -200,8 +215,8 @@ const SpaceForm = ({ propertyId, parentUnitId, onSuccess, onClose }) => {
               />
             </div>
 
-            <div className="flex items-end">
-              <label className="flex items-center space-x-3 cursor-pointer">
+            <div className="flex flex-col items-start justify-end">
+              <label className="flex items-center space-x-3 cursor-pointer mb-1">
                 <input
                   type="checkbox"
                   name="utilities"
@@ -211,6 +226,32 @@ const SpaceForm = ({ propertyId, parentUnitId, onSuccess, onClose }) => {
                 />
                 <span className="text-sm font-medium text-gray-700">Utilities Included</span>
               </label>
+              {formData.utilities && (
+                <div className="flex flex-col ml-7 space-y-1">
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      name="utilitiesTypes"
+                      value="electricity"
+                      checked={formData.utilitiesTypes.includes('electricity')}
+                      onChange={handleInputChange}
+                      className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                    />
+                    <span className="text-xs text-gray-700">Electricity</span>
+                  </label>
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      name="utilitiesTypes"
+                      value="water"
+                      checked={formData.utilitiesTypes.includes('water')}
+                      onChange={handleInputChange}
+                      className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                    />
+                    <span className="text-xs text-gray-700">Water</span>
+                  </label>
+                </div>
+              )}
             </div>
           </div>
 

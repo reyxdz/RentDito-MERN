@@ -193,7 +193,20 @@ const SpacesView = () => {
 
                     <div>
                       <p className="text-gray-600 text-sm">Utilities</p>
-                      <p className="text-gray-900 font-semibold">{space.utilities ? 'Included' : 'Not Included'}</p>
+                      {space.utilities && space.utilities.included ? (
+                        <p className="text-gray-900 font-semibold">
+                          Included
+                          {Array.isArray(space.utilities.types) && space.utilities.types.length > 0 && (
+                            <span>:
+                              {space.utilities.types.includes('electricity') && ' Electricity'}
+                              {space.utilities.types.includes('water') && (space.utilities.types.includes('electricity') ? ',' : '')}
+                              {space.utilities.types.includes('water') && ' Water'}
+                            </span>
+                          )}
+                        </p>
+                      ) : (
+                        <p className="text-gray-900 font-semibold">Not Included</p>
+                      )}
                     </div>
 
                     {space.description && (

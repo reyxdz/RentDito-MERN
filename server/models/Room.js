@@ -22,8 +22,15 @@ const roomSchema = new mongoose.Schema({
   images: [String],
   amenities: [String],
   utilities: {
-    type: Boolean,
-    default: false
+    included: {
+      type: Boolean,
+      default: false
+    },
+    types: {
+      type: [String], // e.g., ['electricity', 'water']
+      enum: ['electricity', 'water'],
+      default: []
+    }
   },
   parentUnitId: {
     type: mongoose.Schema.Types.ObjectId,
