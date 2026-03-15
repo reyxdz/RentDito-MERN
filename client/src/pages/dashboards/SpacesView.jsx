@@ -157,10 +157,7 @@ const SpacesView = () => {
                 {/* Space Header */}
                 <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-6 text-white">
                   <div className="flex items-start justify-between mb-2">
-                    <div>
-                      <h4 className="text-2xl font-bold">{space.roomName || space.spaceName}</h4>
-                      <p className="text-blue-100 text-sm mt-1">{space.occupancyType}</p>
-                    </div>
+                    <h4 className="text-2xl font-bold">{space.roomName || space.spaceName}</h4>
                     <div className="flex gap-2">
                       <button
                         onClick={() => {}}
@@ -185,24 +182,18 @@ const SpacesView = () => {
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <p className="text-gray-600 text-sm">Type</p>
-                        <p className="text-gray-900 font-semibold capitalize">{space.type || 'N/A'}</p>
-                      </div>
-                      <div>
                         <p className="text-gray-600 text-sm">Capacity</p>
                         <p className="text-gray-900 font-semibold">{space.capacity || 1} person(s)</p>
                       </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
                       <div>
                         <p className="text-gray-600 text-sm">Monthly Price</p>
                         <p className="text-gray-900 font-semibold">₱{space.monthlyPrice || 0}</p>
                       </div>
-                      <div>
-                        <p className="text-gray-600 text-sm">Utilities</p>
-                        <p className="text-gray-900 font-semibold">{space.utilities ? 'Included' : 'Not Included'}</p>
-                      </div>
+                    </div>
+
+                    <div>
+                      <p className="text-gray-600 text-sm">Utilities</p>
+                      <p className="text-gray-900 font-semibold">{space.utilities ? 'Included' : 'Not Included'}</p>
                     </div>
 
                     {space.description && (

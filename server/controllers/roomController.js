@@ -59,10 +59,10 @@ exports.getRoomsByProperty = async (req, res) => {
 
 exports.createRoom = async (req, res) => {
   try {
-    const { propertyId, roomNumber, type, occupancyType, capacity, monthlyPrice, description, amenities, utilities, images, parentUnitId } = req.body;
+    const { propertyId, roomNumber, capacity, monthlyPrice, description, amenities, utilities, images, parentUnitId } = req.body;
 
-    if (!propertyId || !roomNumber || monthlyPrice === undefined || monthlyPrice === null || !occupancyType) {
-      return res.status(400).json({ message: 'Property ID, room number, price, and occupancy type are required' });
+    if (!propertyId || !roomNumber || monthlyPrice === undefined || monthlyPrice === null) {
+      return res.status(400).json({ message: 'Property ID, room number, and price are required' });
     }
 
     // Verify property exists
@@ -80,8 +80,6 @@ exports.createRoom = async (req, res) => {
     const room = await Room.create({
       propertyId,
       roomNumber,
-      type: type || 'single',
-      occupancyType,
       capacity: capacity || 1,
       monthlyPrice,
       description,
@@ -131,7 +129,7 @@ exports.getRoom = async (req, res) => {
 exports.updateRoom = async (req, res) => {
   try {
     const { id } = req.params;
-    const { type, capacity, monthlyPrice, description, amenities, status } = req.body;
+    const { capacity, monthlyPrice, description, amenities, status } = req.body;
 
     const room = await Room.findById(id);
     if (!room) {
@@ -139,7 +137,6 @@ exports.updateRoom = async (req, res) => {
     }
 
     // Update fields
-    if (type) room.type = type;
     if (capacity) room.capacity = capacity;
     if (monthlyPrice) room.monthlyPrice = monthlyPrice;
     if (description) room.description = description;

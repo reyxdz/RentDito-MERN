@@ -7,8 +7,6 @@ const SpaceForm = ({ propertyId, parentUnitId, onSuccess, onClose }) => {
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     spaceName: '',
-    type: 'single',
-    occupancyType: 'Room for rent',
     capacity: 1,
     monthlyPrice: 0,
     description: '',
@@ -18,20 +16,7 @@ const SpaceForm = ({ propertyId, parentUnitId, onSuccess, onClose }) => {
   });
   const [imagePreviews, setImagePreviews] = useState([]);
 
-  const spaceTypes = [
-    { value: 'bedspace', label: 'Bedspace' },
-    { value: 'apartment', label: 'Apartment' },
-    { value: 'dormitory', label: 'Dormitory' },
-    { value: 'room-for-rent', label: 'Room for Rent' },
-  ];
 
-  const occupancyTypes = [
-    { value: 'Room for rent', label: 'Room for rent' },
-    { value: 'House for rent', label: 'House for rent' },
-    { value: 'Apartment', label: 'Apartment' },
-    { value: 'Dormitory', label: 'Dormitory' },
-    { value: 'Boarding House', label: 'Boarding House' },
-  ];
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -125,8 +110,6 @@ const SpaceForm = ({ propertyId, parentUnitId, onSuccess, onClose }) => {
       const response = await axios.post('/api/rooms', {
         propertyId,
         roomNumber: formData.spaceName,
-        type: formData.type,
-        occupancyType: formData.occupancyType,
         capacity: formData.capacity,
         monthlyPrice: formData.monthlyPrice,
         description: formData.description,
@@ -185,57 +168,19 @@ const SpaceForm = ({ propertyId, parentUnitId, onSuccess, onClose }) => {
             />
           </div>
 
-          {/* Type, Capacity, and Occupancy Type */}
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Space Type *
-              </label>
-              <select
-                name="type"
-                value={formData.type}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-              >
-                {spaceTypes.map((t) => (
-                  <option key={t.value} value={t.value}>
-                    {t.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Capacity (Person/s) *
-              </label>
-              <input
-                type="number"
-                name="capacity"
-                value={formData.capacity}
-                onChange={handleInputChange}
-                min="1"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Occupancy Type *
-              </label>
-              <select
-                name="occupancyType"
-                value={formData.occupancyType}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-              >
-                {occupancyTypes.map((t) => (
-                  <option key={t.value} value={t.value}>
-                    {t.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+          {/* Capacity */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Capacity (Person/s) *
+            </label>
+            <input
+              type="number"
+              name="capacity"
+              value={formData.capacity}
+              onChange={handleInputChange}
+              min="1"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+            />
           </div>
 
           {/* Monthly Price and Utilities */}
