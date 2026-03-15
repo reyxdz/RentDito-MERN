@@ -156,8 +156,8 @@ const SpacesView = () => {
               >
                 {/* Space Header */}
                 <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-6 text-white">
-                  <div className="flex items-start justify-between mb-2">
-                    <h4 className="text-2xl font-bold">{space.roomName || space.spaceName}</h4>
+                  <div className="flex items-start justify-between">
+                    <h4 className="text-2xl font-bold">{space.roomName || space.roomNumber || 'Space'}</h4>
                     <div className="flex gap-2">
                       <button
                         onClick={() => {}}
