@@ -1,8 +1,9 @@
 require('dotenv').config();
 const connectDB = require('./config/database');
 const User = require('./models/User');
+const Property = require('./models/Property');
 
-const seedDemoUsers = async () => {
+const seedDemoData = async () => {
   try {
     await connectDB();
     
@@ -78,6 +79,59 @@ const seedDemoUsers = async () => {
       admin.adminDetails.landlordId = landlord._id;
       await admin.save();
     }
+
+    // Seed demo properties
+    if (landlord) {
+      await Property.deleteMany({ landlordId: landlord._id });
+      
+      const demoProperties = [
+        {
+          landlordId: landlord._id,
+          name: 'White Dorm',
+          code: 'WD-001',
+          type: 'Dormitory',
+          description: 'A modern dormitory with excellent facilities',
+          address: 'Sikatuna Street',
+          barangay: 'Zapatera',
+          municipality: 'Cebu City',
+          city: 'Cebu',
+          totalRooms: 0,
+          occupiedRooms: 0,
+          status: 'active'
+        },
+        {
+          landlordId: landlord._id,
+          name: 'Downtown Inn',
+          code: 'DI-001',
+          type: 'Boarding House',
+          description: 'Centrally located boarding house',
+          address: 'Junquera Street',
+          barangay: 'Lorega',
+          municipality: 'Cebu City',
+          city: 'Cebu',
+          totalRooms: 8,
+          occupiedRooms: 7,
+          status: 'active'
+        },
+        {
+          landlordId: landlord._id,
+          name: 'Westside Hub',
+          code: 'WH-001',
+          type: 'Apartment',
+          description: 'Comfortable apartment complex',
+          address: 'Gorordo Avenue',
+          barangay: 'Lahug',
+          municipality: 'Cebu City',
+          city: 'Cebu',
+          totalRooms: 6,
+          occupiedRooms: 5,
+          status: 'active'
+        }
+      ];
+
+      await Property.create(demoProperties);
+      console.log('✅ Demo properties created successfully!');
+    }
     
     console.log('✅ Demo users created successfully!');
     console.log('\nDemo Credentials:');
@@ -88,9 +142,9 @@ const seedDemoUsers = async () => {
     
     process.exit(0);
   } catch (error) {
-    console.error('Error seeding demo users:', error);
+    console.error('Error seeding demo data:', error);
     process.exit(1);
   }
 };
 
-seedDemoUsers();
+seedDemoData();
