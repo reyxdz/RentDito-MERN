@@ -59,7 +59,7 @@ const LocationsView = () => {
   };
 
   const handlePropertyCardClick = (propertyId) => {
-    navigate(`/dashboard/landlord/property/${propertyId}/units`);
+    navigate(`/dashboard/landlord/property/${propertyId}/spaces`);
   };
 
   const handleDeleteProperty = async (e, propertyId) => {

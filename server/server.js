@@ -13,7 +13,15 @@ connectDB();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    // Allow localhost and your PC's IP
+    if (origin.includes('localhost') || origin.includes('192.168.254.110') || origin.includes('127.0.0.1')) {
+      return callback(null, true);
+    }
+    callback(new Error('CORS not allowed'));
+  },
   credentials: true
 }));
 
