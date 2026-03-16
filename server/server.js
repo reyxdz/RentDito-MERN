@@ -16,10 +16,20 @@ app.use(cors({
   origin: function(origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    // Allow localhost and your PC's IP
-    if (origin.includes('localhost') || origin.includes('192.168.254.110') || origin.includes('127.0.0.1')) {
+    
+    const allowedPatterns = [
+      /localhost/,
+      /127\.0\.0\.1/,
+      /^http:\/\/192\./,  // Any local IP
+      /^http:\/\/10\./,   // Private IP range
+      /duckdns\.org$/,     // DuckDNS domains
+      /\.vercel\.app$/     // Vercel deployments
+    ];
+    
+    if (allowedPatterns.some(pattern => pattern.test(origin))) {
       return callback(null, true);
     }
+    
     callback(new Error('CORS not allowed'));
   },
   credentials: true
@@ -62,6 +72,6 @@ app.use((error, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT} (0.0.0.0)`);
 });

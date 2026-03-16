@@ -29,7 +29,6 @@ This script will:
 - Guide you through router setup
 - Help you configure DuckDNS
 - Update DNS with your IP
-
 ---
 
 ### Step 2️⃣: Manual Setup (If script doesn't work)
