@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
 import { Button, Input, Alert } from '../components/ui';
 import { Building2 } from 'lucide-react';
 
 const Register = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { register, loading, error, clearError } = useAuthStore();
+  const selectedRole = searchParams.get('role') || 'tenant';
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'tenant',
+    role: selectedRole,
     phone: ''
   });
   const [validationErrors, setValidationErrors] = useState({});
@@ -111,18 +113,18 @@ const Register = () => {
               onChange={handleChange}
             />
 
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Account Type</label>
-              <select
-                name="role"
-                value={formData.role}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            {/* Role badge — pre-selected from the previous page */}
+            <div className="mb-4 flex items-center gap-2 px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <span className="text-sm font-medium text-blue-700">
+                Registering as:
+              </span>
+              <span className="text-sm font-semibold text-blue-900 capitalize">{formData.role}</span>
+              <Link
+                to="/register-type"
+                className="ml-auto text-xs text-blue-600 hover:text-blue-800 underline"
               >
-                <option value="tenant">Tenant</option>
-                <option value="landlord">Landlord</option>
-                <option value="landlord-admin">Landlord Admin</option>
-              </select>
+                Change
+              </Link>
             </div>
 
             <Input

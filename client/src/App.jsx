@@ -4,6 +4,7 @@ import axios from 'axios';
 import useAuthStore from './store/authStore';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import RegisterType from './pages/RegisterType';
 import TenantDashboard from './pages/dashboards/TenantDashboard';
 import LandlordLayout from './pages/dashboards/LandlordLayout';
 import AdminDashboard from './pages/dashboards/AdminDashboard';
@@ -41,6 +42,7 @@ function App() {
       <Routes>
         {/* Public Routes */}
         <Route path="/login" element={<Login />} />
+        <Route path="/register-type" element={<RegisterType />} />
         <Route path="/register" element={<Register />} />
 
         {/* Dashboard Routes */}
