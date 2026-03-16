@@ -50,7 +50,7 @@ const propertySchema = new mongoose.Schema({
   amenities: [String],
   utilitiesIncluded: {
     type: Boolean,
-    default: false
+    default: true
   },
   documents: [{
     name: String,

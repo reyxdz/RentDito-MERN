@@ -15,13 +15,14 @@ const PropertyForm = ({ onSuccess, onClose }) => {
     barangay: '',
     municipality: '',
     city: '',
+    utilitiesIncluded: true,
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     });
   };
 
@@ -156,6 +157,50 @@ const PropertyForm = ({ onSuccess, onClose }) => {
               onChange={handleChange}
               required
             />
+          </div>
+
+          {/* Utilities */}
+          <div className="flex items-center gap-3 py-2">
+            <div className="relative">
+              <input
+                type="checkbox"
+                id="utilitiesIncluded"
+                name="utilitiesIncluded"
+                checked={formData.utilitiesIncluded}
+                onChange={handleChange}
+                className="sr-only"
+              />
+              <div
+                onClick={() =>
+                  setFormData({ ...formData, utilitiesIncluded: !formData.utilitiesIncluded })
+                }
+                className={`w-11 h-6 rounded-full cursor-pointer transition-colors duration-200 flex items-center ${
+                  formData.utilitiesIncluded ? 'bg-blue-600' : 'bg-gray-300'
+                }`}
+              >
+                <div
+                  className={`w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-200 ml-0.5 ${
+                    formData.utilitiesIncluded ? 'translate-x-5' : 'translate-x-0'
+                  }`}
+                />
+              </div>
+            </div>
+            <label
+              htmlFor="utilitiesIncluded"
+              className="text-sm font-medium text-gray-700 cursor-pointer select-none"
+              onClick={() =>
+                setFormData({ ...formData, utilitiesIncluded: !formData.utilitiesIncluded })
+              }
+            >
+              Utilities Included
+              <span className={`ml-2 text-xs font-semibold px-2 py-0.5 rounded-full ${
+                formData.utilitiesIncluded
+                  ? 'bg-blue-100 text-blue-700'
+                  : 'bg-gray-100 text-gray-500'
+              }`}>
+                {formData.utilitiesIncluded ? 'Yes' : 'No'}
+              </span>
+            </label>
           </div>
 
           {/* Actions */}
