@@ -14,6 +14,8 @@ const SpaceDashboard = () => {
       tenant: { fullName: 'Juan Dela Cruz' },
       rentStatus: 'paid',
       utilityStatus: 'pending',
+      electricBillStatus: 'paid',
+      waterBillStatus: 'pending',
       leaseEnd: '2026-12-31',
     },
     {
@@ -21,6 +23,8 @@ const SpaceDashboard = () => {
       tenant: { fullName: 'Maria Santos' },
       rentStatus: 'late',
       utilityStatus: 'paid',
+      electricBillStatus: 'pending',
+      waterBillStatus: 'paid',
       leaseEnd: '2027-03-31',
     },
     {
@@ -28,6 +32,8 @@ const SpaceDashboard = () => {
       tenant: { fullName: 'Pedro Reyes' },
       rentStatus: 'pending',
       utilityStatus: 'late',
+      electricBillStatus: 'late',
+      waterBillStatus: 'pending',
       leaseEnd: '2026-08-31',
     },
   ]);
@@ -46,7 +52,7 @@ const SpaceDashboard = () => {
         utilities: {
           included: false,
           types: [],
-          electricity: {
+          electric: {
             common: true,
             ownSubmeter: false,
           },
@@ -74,7 +80,7 @@ const SpaceDashboard = () => {
   const utilitiesIncluded = space.utilities && space.utilities.included;
   const utilitiesTypes = (space.utilities && space.utilities.types) || [];
   // Demo: random utility bill amounts
-  const electricityBillAmount = !utilitiesIncluded ? (Math.floor(Math.random() * 1500) + 500) : 0;
+  const electricBillAmount = !utilitiesIncluded ? (Math.floor(Math.random() * 1500) + 500) : 0;
   const waterBillAmount = !utilitiesIncluded ? (Math.floor(Math.random() * 800) + 300) : 0;
   const currentTenants = tenants.length;
   const expectedCapacity = space.capacity || 1;
@@ -111,11 +117,11 @@ const SpaceDashboard = () => {
             </div>
           </div>
 
-          {/* Electricity Bill Card */}
+          {/* electric Bill Card */}
           {!utilitiesIncluded && (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-300">
               <div className="flex items-center justify-between mb-4">
-                <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Electricity Bill</p>
+                <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">electric Bill</p>
                 <div className="flex gap-2">
                   <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="View">
                     <Eye size={16} className="text-gray-500" />
@@ -126,8 +132,8 @@ const SpaceDashboard = () => {
                 </div>
               </div>
               <div>
-                <span className="text-3xl font-bold text-yellow-600">
-                  ₱{electricityBillAmount.toLocaleString()}
+                <span className="text-3xl font-bold text-blue-600">
+                  ₱{electricBillAmount.toLocaleString()}
                 </span>
               </div>
               <div className="mt-4 pt-4 border-t border-gray-100">
@@ -193,8 +199,11 @@ const SpaceDashboard = () => {
                 <tr className="bg-gray-50 border-b border-gray-100">
                   <th className="px-8 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Full Name</th>
                   <th className="px-8 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Rent Status</th>
-                  {utilitiesIncluded && (
-                    <th className="px-8 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Utility Status</th>
+                  {!utilitiesIncluded && (
+                    <th className="px-8 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Electricity Bill</th>
+                  )}
+                  {!utilitiesIncluded && (
+                    <th className="px-8 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Water Bill</th>
                   )}
                   <th className="px-8 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Lease End</th>
                 </tr>
@@ -202,7 +211,7 @@ const SpaceDashboard = () => {
               <tbody>
                 {tenants.length === 0 ? (
                   <tr>
-                    <td colSpan={utilitiesIncluded ? 4 : 3} className="text-center py-12 text-gray-400">
+                    <td colSpan={!utilitiesIncluded ? 5 : 3} className="text-center py-12 text-gray-400">
                       <div className="flex flex-col items-center gap-2">
                         <span className="text-3xl opacity-30">🏢</span>
                         <span>No tenants yet</span>
@@ -216,9 +225,14 @@ const SpaceDashboard = () => {
                       <td className="px-8 py-5">
                         <StatusBadge status={tenant.rentStatus} />
                       </td>
-                      {utilitiesIncluded && (
+                      {!utilitiesIncluded && (
                         <td className="px-8 py-5">
-                          <StatusBadge status={tenant.utilityStatus} />
+                          <StatusBadge status={tenant.electricBillStatus} />
+                        </td>
+                      )}
+                      {!utilitiesIncluded && (
+                        <td className="px-8 py-5">
+                          <StatusBadge status={tenant.waterBillStatus} />
                         </td>
                       )}
                       <td className="px-8 py-5 text-gray-600 font-medium">{formatLeaseEnd(tenant.leaseEnd)}</td>
