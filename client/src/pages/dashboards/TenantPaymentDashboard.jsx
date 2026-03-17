@@ -386,6 +386,9 @@ const TenantPaymentDashboard = () => {
             </div>
           </div>
         )}
+      </div>
+    </div>
+  );
 };
 
 export default TenantPaymentDashboard;
