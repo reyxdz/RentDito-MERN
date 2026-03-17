@@ -30,6 +30,26 @@ const roomSchema = new mongoose.Schema({
       type: [String], // e.g., ['electricity', 'water']
       enum: ['electricity', 'water'],
       default: []
+    },
+    electricity: {
+      common: {
+        type: Boolean,
+        default: false
+      },
+      ownSubmeter: {
+        type: Boolean,
+        default: false
+      }
+    },
+    water: {
+      common: {
+        type: Boolean,
+        default: false
+      },
+      ownSubmeter: {
+        type: Boolean,
+        default: false
+      }
     }
   },
   parentUnitId: {

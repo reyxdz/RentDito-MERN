@@ -59,7 +59,7 @@ exports.getRoomsByProperty = async (req, res) => {
 
 exports.createRoom = async (req, res) => {
   try {
-    const { propertyId, roomNumber, capacity, monthlyPrice, description, amenities, utilitiesTypes, images, parentUnitId } = req.body;
+    const { propertyId, roomNumber, capacity, monthlyPrice, description, amenities, utilities, images, parentUnitId } = req.body;
 
     if (!propertyId || !roomNumber || monthlyPrice === undefined || monthlyPrice === null) {
       return res.status(400).json({ message: 'Property ID, room number, and price are required' });
@@ -77,6 +77,9 @@ exports.createRoom = async (req, res) => {
       return res.status(400).json({ message: 'Room number already exists in this property' });
     }
 
+    // Build utilities object
+    const utilitiesData = utilities || { included: true };
+    
     const room = await Room.create({
       propertyId,
       roomNumber,
@@ -86,8 +89,10 @@ exports.createRoom = async (req, res) => {
       images: images || [],
       amenities: amenities || [],
       utilities: {
-        included: Array.isArray(utilitiesTypes) && utilitiesTypes.length > 0,
-        types: Array.isArray(utilitiesTypes) ? utilitiesTypes : [],
+        included: utilitiesData.included || false,
+        types: utilitiesData.types || [],
+        electricity: utilitiesData.electricity || { common: false, ownSubmeter: false },
+        water: utilitiesData.water || { common: false, ownSubmeter: false },
       },
       parentUnitId: parentUnitId || null,
       isAvailable: true,
@@ -132,7 +137,7 @@ exports.getRoom = async (req, res) => {
 exports.updateRoom = async (req, res) => {
   try {
     const { id } = req.params;
-    const { capacity, monthlyPrice, description, amenities, status, utilitiesTypes } = req.body;
+    const { capacity, monthlyPrice, description, amenities, status, utilities } = req.body;
 
     const room = await Room.findById(id);
     if (!room) {
@@ -144,9 +149,11 @@ exports.updateRoom = async (req, res) => {
     if (monthlyPrice) room.monthlyPrice = monthlyPrice;
     if (description) room.description = description;
     if (amenities) room.amenities = amenities;
-    if (typeof utilitiesTypes !== 'undefined') {
-      room.utilities.included = Array.isArray(utilitiesTypes) && utilitiesTypes.length > 0;
-      room.utilities.types = Array.isArray(utilitiesTypes) ? utilitiesTypes : [];
+    if (typeof utilities !== 'undefined') {
+      room.utilities.included = utilities.included || false;
+      room.utilities.types = utilities.types || [];
+      room.utilities.electricity = utilities.electricity || { common: false, ownSubmeter: false };
+      room.utilities.water = utilities.water || { common: false, ownSubmeter: false };
     }
     if (status) {
       room.status = status;

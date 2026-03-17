@@ -1,35 +1,65 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Upload, Loader } from 'lucide-react';
 import axios from 'axios';
 
 const SpaceForm = ({ propertyId, parentUnitId, onSuccess, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [property, setProperty] = useState(null);
   const [formData, setFormData] = useState({
     spaceName: '',
     capacity: 1,
     monthlyPrice: 0,
     description: '',
-    utilitiesTypes: [],
+    utilities: {
+      electricity: {
+        common: false,
+        ownSubmeter: false,
+      },
+      water: {
+        common: false,
+        ownSubmeter: false,
+      },
+    },
     amenities: '',
     images: [],
   });
   const [imagePreviews, setImagePreviews] = useState([]);
 
+  // Fetch property data to check utilities setting
+  useEffect(() => {
+    const fetchProperty = async () => {
+      try {
+        const response = await axios.get(`/api/properties/${propertyId}`);
+        setProperty(response.data.data);
+      } catch (err) {
+        console.error('Error fetching property:', err);
+      }
+    };
+
+    if (propertyId) {
+      fetchProperty();
+    }
+  }, [propertyId]);
+
 
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (name === 'utilitiesTypes') {
-      setFormData((prev) => {
-        let updatedTypes = prev.utilitiesTypes || [];
-        if (checked) {
-          updatedTypes = [...updatedTypes, value];
-        } else {
-          updatedTypes = updatedTypes.filter((t) => t !== value);
-        }
-        return { ...prev, utilitiesTypes: updatedTypes };
-      });
+    
+    if (name.startsWith('utility-')) {
+      // Handle utility breakdown checkboxes (e.g., utility-electricity-common)
+      const [, utilityType, optionType] = name.split('-');
+      setFormData((prev) => ({
+        ...prev,
+        utilities: {
+          ...prev.utilities,
+          [utilityType]: {
+            ...prev.utilities[utilityType],
+            [optionType]: checked,
+          },
+        },
+      }));
     } else {
       setFormData((prev) => ({
         ...prev,
@@ -125,7 +155,11 @@ const SpaceForm = ({ propertyId, parentUnitId, onSuccess, onClose }) => {
         capacity: formData.capacity,
         monthlyPrice: formData.monthlyPrice,
         description: formData.description,
-        utilitiesTypes: formData.utilitiesTypes,
+        utilities: {
+          included: property?.utilitiesIncluded || false,
+          electricity: formData.utilities.electricity,
+          water: formData.utilities.water,
+        },
         amenities: amenitiesArray,
         images: imageUrls,
         parentUnitId: parentUnitId,
@@ -195,51 +229,82 @@ const SpaceForm = ({ propertyId, parentUnitId, onSuccess, onClose }) => {
             />
           </div>
 
-          {/* Monthly Price and Utilities */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Monthly Rent *
-              </label>
-              <input
-                type="number"
-                name="monthlyPrice"
-                value={formData.monthlyPrice}
-                onChange={handleInputChange}
-                min="0"
-                placeholder="0"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-              />
-            </div>
+          {/* Monthly Price */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Monthly Rent *
+            </label>
+            <input
+              type="number"
+              name="monthlyPrice"
+              value={formData.monthlyPrice}
+              onChange={handleInputChange}
+              min="0"
+              placeholder="0"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+            />
+          </div>
 
-            <div className="flex flex-col items-start justify-end">
-              <span className="text-sm font-medium text-gray-700 mb-1">Utilities Included</span>
-              <div className="flex flex-col ml-2 space-y-1">
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    name="utilitiesTypes"
-                    value="electricity"
-                    checked={formData.utilitiesTypes.includes('electricity')}
-                    onChange={handleInputChange}
-                    className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer"
-                  />
-                  <span className="text-xs text-gray-700">Electricity</span>
-                </label>
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    name="utilitiesTypes"
-                    value="water"
-                    checked={formData.utilitiesTypes.includes('water')}
-                    onChange={handleInputChange}
-                    className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer"
-                  />
-                  <span className="text-xs text-gray-700">Water</span>
-                </label>
+          {/* Utilities Breakdown - Only shown when Utilities are NOT Included on the Property */}
+          {property && !property.utilitiesIncluded && (
+            <div className="space-y-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <p className="text-sm font-semibold text-gray-700 mb-4">How are utilities provided?</p>
+              
+              {/* Electricity */}
+              <div>
+                <p className="text-sm font-medium text-gray-700 mb-2">Electricity:</p>
+                <div className="flex flex-col space-y-2 ml-4">
+                  <label className="flex items-center space-x-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="utility-electricity-common"
+                      checked={formData.utilities.electricity.common}
+                      onChange={handleInputChange}
+                      className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">Common</span>
+                  </label>
+                  <label className="flex items-center space-x-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="utility-electricity-ownSubmeter"
+                      checked={formData.utilities.electricity.ownSubmeter}
+                      onChange={handleInputChange}
+                      className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">Own Submeter</span>
+                  </label>
+                </div>
+              </div>
+
+              {/* Water */}
+              <div>
+                <p className="text-sm font-medium text-gray-700 mb-2">Water:</p>
+                <div className="flex flex-col space-y-2 ml-4">
+                  <label className="flex items-center space-x-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="utility-water-common"
+                      checked={formData.utilities.water.common}
+                      onChange={handleInputChange}
+                      className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">Common</span>
+                  </label>
+                  <label className="flex items-center space-x-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="utility-water-ownSubmeter"
+                      checked={formData.utilities.water.ownSubmeter}
+                      onChange={handleInputChange}
+                      className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">Own Submeter</span>
+                  </label>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Description */}
           <div>
