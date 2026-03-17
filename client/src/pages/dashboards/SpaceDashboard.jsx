@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Edit, Eye } from 'lucide-react';
 import axios from 'axios';
 
 const SpaceDashboard = () => {
@@ -87,57 +88,114 @@ const SpaceDashboard = () => {
         </div>
 
         {/* Dashboard Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {/* Monthly Rent Card */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-300">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Monthly Rent</p>
-                <div className="mt-3">
-                  <span className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
-                    ₱{space.monthlyPrice.toLocaleString()}
-                  </span>
-                </div>
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Monthly Rent</p>
+              <div className="flex gap-2">
+                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="View">
+                  <Eye size={16} className="text-gray-500" />
+                </button>
+                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Edit">
+                  <Edit size={16} className="text-gray-500" />
+                </button>
               </div>
-              <div className="text-4xl opacity-10">🏠</div>
+            </div>
+            <div>
+              <span className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
+                ₱{space.monthlyPrice.toLocaleString()}
+              </span>
             </div>
             <div className="mt-4 pt-4 border-t border-gray-100">
               <p className="text-xs text-gray-500">Per month</p>
             </div>
           </div>
 
-          {/* Utility Bills Card */}
-          {utilitiesIncluded && (
+          {/* Electricity Bill Card */}
+          {!utilitiesIncluded && (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-300">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Utility Bills</p>
-                  <p className="text-sm text-gray-600 mt-2 font-medium">Included: {utilitiesTypes.join(', ') || 'None'}</p>
-                  <div className="mt-3">
-                    <span className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-700 bg-clip-text text-transparent">
-                      ₱{utilityBillAmount.toLocaleString()}
-                    </span>
-                  </div>
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Electricity Bill</p>
+                <div className="flex gap-2">
+                  <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="View">
+                    <Eye size={16} className="text-gray-500" />
+                  </button>
+                  <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Edit">
+                    <Edit size={16} className="text-gray-500" />
+                  </button>
                 </div>
-                <div className="text-4xl opacity-10">⚡</div>
+              </div>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Common</p>
+                  <span className="text-xl font-bold text-yellow-600">
+                    {space.utilities?.electricity?.common ? '✓' : '−'}
+                  </span>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Own Submeter</p>
+                  <span className="text-xl font-bold text-yellow-600">
+                    {space.utilities?.electricity?.ownSubmeter ? '✓' : '−'}
+                  </span>
+                </div>
               </div>
               <div className="mt-4 pt-4 border-t border-gray-100">
-                <p className="text-xs text-gray-500">Estimated bill</p>
+                <p className="text-xs text-gray-500">Tenant pays separately</p>
               </div>
             </div>
           )}
 
-          {/* Tenants Card */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-300">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Occupancy</p>
-                <div className="mt-3 flex items-baseline gap-2">
-                  <span className="text-4xl font-bold text-gray-900">{currentTenants}</span>
-                  <span className="text-lg text-gray-400">/ {expectedCapacity}</span>
+          {/* Water Bill Card */}
+          {!utilitiesIncluded && (
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-300">
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Water Bill</p>
+                <div className="flex gap-2">
+                  <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="View">
+                    <Eye size={16} className="text-gray-500" />
+                  </button>
+                  <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Edit">
+                    <Edit size={16} className="text-gray-500" />
+                  </button>
                 </div>
               </div>
-              <div className="text-4xl opacity-10">👥</div>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Common</p>
+                  <span className="text-xl font-bold text-blue-600">
+                    {space.utilities?.water?.common ? '✓' : '−'}
+                  </span>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Own Submeter</p>
+                  <span className="text-xl font-bold text-blue-600">
+                    {space.utilities?.water?.ownSubmeter ? '✓' : '−'}
+                  </span>
+                </div>
+              </div>
+              <div className="mt-4 pt-4 border-t border-gray-100">
+                <p className="text-xs text-gray-500">Tenant pays separately</p>
+              </div>
+            </div>
+          )}
+
+          {/* Occupancy Card */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-300">
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Occupancy</p>
+              <div className="flex gap-2">
+                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="View">
+                  <Eye size={16} className="text-gray-500" />
+                </button>
+                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Edit">
+                  <Edit size={16} className="text-gray-500" />
+                </button>
+              </div>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-bold text-gray-900">{currentTenants}</span>
+              <span className="text-lg text-gray-400">/ {expectedCapacity}</span>
             </div>
             <div className="mt-4 pt-4 border-t border-gray-100">
               <div className="w-full bg-gray-200 rounded-full h-2">
