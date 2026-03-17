@@ -253,7 +253,14 @@ const SpaceDashboard = () => {
                 ) : (
                   tenants.map((tenant, idx) => (
                     <tr key={tenant._id} className={`${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'} border-b border-gray-100 hover:bg-blue-50 transition-colors duration-150`}>
-                      <td className="px-8 py-5 font-semibold text-gray-900">{tenant.tenant?.fullName || 'N/A'}</td>
+                      <td className="px-8 py-5 font-semibold text-gray-900">
+                        <button
+                          onClick={() => navigate(`/dashboard/landlord/tenant/${tenant._id}`)}
+                          className="text-blue-600 hover:text-blue-700 hover:underline cursor-pointer transition-colors"
+                        >
+                          {tenant.tenant?.fullName || 'N/A'}
+                        </button>
+                      </td>
                       <td className="px-8 py-5">
                         <StatusBadge status={tenant.rentStatus} />
                       </td>

@@ -10,6 +10,7 @@ import UnitsView from './UnitsView';
 import TenantsView from './TenantsView';
 import RoomsView from './RoomsView';
 import SpaceDashboard from './SpaceDashboard';
+import TenantPaymentDashboard from './TenantPaymentDashboard';
 
 const LandlordLayout = () => {
   return (
@@ -27,6 +28,7 @@ const LandlordLayout = () => {
       <Route path="/occupancy-types/:locationKey/units/:occupancyType/rooms/:unitId" element={<RoomsView />} />
       <Route path="/occupancy-types/:locationKey/units/:occupancyType/rooms/:unitId/tenants/:roomId" element={<TenantsView />} />
       <Route path="/landlord/space/:spaceId" element={<SpaceDashboard />} />
+      <Route path="/landlord/tenant/:tenantId" element={<TenantPaymentDashboard />} />
       <Route path="*" element={<Navigate to="/dashboard/landlord" />} />
     </Routes>
   );
