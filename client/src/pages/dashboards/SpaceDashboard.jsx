@@ -44,8 +44,16 @@ const SpaceDashboard = () => {
         monthlyPrice: 6900,
         capacity: 4,
         utilities: {
-          included: true,
-          types: ['electricity', 'water'],
+          included: false,
+          types: [],
+          electricity: {
+            common: true,
+            ownSubmeter: false,
+          },
+          water: {
+            common: false,
+            ownSubmeter: true,
+          },
         },
       });
       setLoading(false);
@@ -91,17 +99,7 @@ const SpaceDashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {/* Monthly Rent Card */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-300">
-            <div className="flex items-center justify-between mb-4">
-              <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Monthly Rent</p>
-              <div className="flex gap-2">
-                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="View">
-                  <Eye size={16} className="text-gray-500" />
-                </button>
-                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Edit">
-                  <Edit size={16} className="text-gray-500" />
-                </button>
-              </div>
-            </div>
+            <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-4">Monthly Rent</p>
             <div>
               <span className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
                 ₱{space.monthlyPrice.toLocaleString()}
@@ -182,17 +180,7 @@ const SpaceDashboard = () => {
 
           {/* Occupancy Card */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-300">
-            <div className="flex items-center justify-between mb-4">
-              <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Occupancy</p>
-              <div className="flex gap-2">
-                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="View">
-                  <Eye size={16} className="text-gray-500" />
-                </button>
-                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Edit">
-                  <Edit size={16} className="text-gray-500" />
-                </button>
-              </div>
-            </div>
+            <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-4">Occupancy</p>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-bold text-gray-900">{currentTenants}</span>
               <span className="text-lg text-gray-400">/ {expectedCapacity}</span>
