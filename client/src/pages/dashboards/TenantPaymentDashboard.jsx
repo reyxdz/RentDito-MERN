@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Phone, Mail, MapPin, Home, DollarSign, Zap, Droplet, User } from 'lucide-react';
+import { ArrowLeft, Phone, Mail, MapPin, Home, DollarSign, Zap, Droplet, User, X } from 'lucide-react';
 
 const TenantPaymentDashboard = () => {
   const { tenantId } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [paymentHistoryModal, setPaymentHistoryModal] = useState({ show: false, type: null });
 
   // Demo tenant data
   const [tenant] = useState({
@@ -56,6 +57,38 @@ const TenantPaymentDashboard = () => {
   useEffect(() => {
     setLoading(false);
   }, [tenantId]);
+
+  const generatePaymentHistory = (type = 'rent') => {
+    const history = [];
+    const moveInDate = new Date(tenant.moveInDate);
+    const currentDate = new Date();
+    
+    let current = new Date(moveInDate.getFullYear(), moveInDate.getMonth(), 1);
+    
+    while (current <= currentDate) {
+      const monthName = current.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      
+      // Generate demo payment statuses with weighted distribution
+      const rand = Math.random();
+      let status;
+      if (rand < 0.6) {
+        status = 'paid';
+      } else if (rand < 0.9) {
+        status = 'pending';
+      } else {
+        status = 'late';
+      }
+
+      history.push({
+        month: monthName,
+        status: status,
+      });
+
+      current.setMonth(current.getMonth() + 1);
+    }
+    
+    return history;
+  };
 
   if (loading) {
     return <div className="flex justify-center items-center h-screen">Loading...</div>;
@@ -232,6 +265,12 @@ const TenantPaymentDashboard = () => {
                 <span className="font-semibold text-gray-900">{new Date(payments.rent.lastPaidDate).toLocaleDateString()}</span>
               </div>
             </div>
+            <button
+              onClick={() => setPaymentHistoryModal({ show: true, type: 'rent' })}
+              className="mt-6 w-full py-2 px-4 bg-blue-50 hover:bg-blue-100 text-blue-600 font-semibold rounded-lg transition-colors duration-200 text-sm"
+            >
+              View Payment History
+            </button>
           </div>
 
           {/* Electricity Bill */}
@@ -259,6 +298,12 @@ const TenantPaymentDashboard = () => {
                 <span className="font-semibold text-gray-900">{new Date(payments.electricity.lastPaidDate).toLocaleDateString()}</span>
               </div>
             </div>
+            <button
+              onClick={() => setPaymentHistoryModal({ show: true, type: 'electricity' })}
+              className="mt-6 w-full py-2 px-4 bg-amber-50 hover:bg-amber-100 text-amber-600 font-semibold rounded-lg transition-colors duration-200 text-sm"
+            >
+              View Payment History
+            </button>
           </div>
 
           {/* Water Bill */}
@@ -286,11 +331,61 @@ const TenantPaymentDashboard = () => {
                 <span className="font-semibold text-gray-900">{new Date(payments.water.lastPaidDate).toLocaleDateString()}</span>
               </div>
             </div>
+            <button
+              onClick={() => setPaymentHistoryModal({ show: true, type: 'water' })}
+              className="mt-6 w-full py-2 px-4 bg-cyan-50 hover:bg-cyan-100 text-cyan-600 font-semibold rounded-lg transition-colors duration-200 text-sm"
+            >
+              View Payment History
+            </button>
           </div>
         </div>
-      </div>
-    </div>
-  );
+
+        {/* Payment History Modal */}
+        {paymentHistoryModal.show && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              {/* Modal Header */}
+              <div className="sticky top-0 bg-gradient-to-r from-gray-50 to-gray-100 px-8 py-6 border-b border-gray-200 flex items-center justify-between">
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-900">
+                    {paymentHistoryModal.type === 'rent' && 'Monthly Rent'}
+                    {paymentHistoryModal.type === 'electricity' && 'Electricity Bill'}
+                    {paymentHistoryModal.type === 'water' && 'Water Bill'}
+                    {' '} Payment History
+                  </h3>
+                  <p className="text-sm text-gray-600 mt-1">From {new Date(tenant.moveInDate).toLocaleDateString()} to present</p>
+                </div>
+                <button
+                  onClick={() => setPaymentHistoryModal({ show: false, type: null })}
+                  className="p-2 hover:bg-white hover:shadow-md rounded-lg transition-all"
+                >
+                  <X size={20} className="text-gray-600" />
+                </button>
+              </div>
+
+              {/* Modal Content */}
+              <div className="p-8">
+                <div className="space-y-3">
+                  {generatePaymentHistory(paymentHistoryModal.type).reverse().map((payment, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="flex-1">
+                          <p className="font-semibold text-gray-900">{payment.month}</p>
+                        </div>
+                      </div>
+                      <span className={`font-semibold px-4 py-2 rounded-lg text-sm ${getStatusColor(payment.status)}`}>
+                        {payment.status.charAt(0).toUpperCase() + payment.status.slice(1)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 };
 
 export default TenantPaymentDashboard;
