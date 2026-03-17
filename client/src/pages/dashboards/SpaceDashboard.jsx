@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Edit, Eye } from 'lucide-react';
+import { Edit, Eye, X } from 'lucide-react';
 import axios from 'axios';
 
 const SpaceDashboard = () => {
@@ -39,6 +39,7 @@ const SpaceDashboard = () => {
   ]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [billModal, setBillModal] = useState({ show: false, type: null }); // 'electricity' or 'water'
 
   useEffect(() => {
     // Demo: hardcoded space for now
@@ -85,6 +86,30 @@ const SpaceDashboard = () => {
   const currentTenants = tenants.length;
   const expectedCapacity = space.capacity || 1;
 
+  // Generate demo bill history for past 6 months
+  const generateBillHistory = (isElectricity = true) => {
+    const history = [];
+    const now = new Date();
+    for (let i = 5; i >= 0; i--) {
+      const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const monthName = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      const amount = isElectricity 
+        ? Math.floor(Math.random() * 1500) + 500 
+        : Math.floor(Math.random() * 800) + 300;
+      
+      history.push({
+        month: monthName,
+        amount: amount,
+        isCurrentMonth: i === 0,
+        status: i === 0 ? 'pending' : ['paid', 'paid', 'paid', 'late'][Math.floor(Math.random() * 4)],
+      });
+    }
+    return history;
+  };
+
+  const electricBillHistory = generateBillHistory(true);
+  const waterBillHistory = generateBillHistory(false);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
       <div className="max-w-5xl mx-auto px-4 py-8">
@@ -123,7 +148,11 @@ const SpaceDashboard = () => {
               <div className="flex items-center justify-between mb-4">
                 <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">electric Bill</p>
                 <div className="flex gap-2">
-                  <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="View">
+                  <button 
+                    onClick={() => setBillModal({ show: true, type: 'electricity' })}
+                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors" 
+                    title="View"
+                  >
                     <Eye size={16} className="text-gray-500" />
                   </button>
                   <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Edit">
@@ -148,7 +177,11 @@ const SpaceDashboard = () => {
               <div className="flex items-center justify-between mb-4">
                 <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Water Bill</p>
                 <div className="flex gap-2">
-                  <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="View">
+                  <button 
+                    onClick={() => setBillModal({ show: true, type: 'water' })}
+                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors" 
+                    title="View"
+                  >
                     <Eye size={16} className="text-gray-500" />
                   </button>
                   <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Edit">
@@ -243,6 +276,67 @@ const SpaceDashboard = () => {
             </table>
           </div>
         </div>
+
+        {/* Bill History Modal */}
+        {billModal.show && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+              {/* Modal Header */}
+              <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                <h3 className="text-2xl font-bold text-gray-900">
+                  {billModal.type === 'electricity' ? 'Electricity Bill' : 'Water Bill'} History
+                </h3>
+                <button
+                  onClick={() => setBillModal({ show: false, type: null })}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <X size={24} className="text-gray-600" />
+                </button>
+              </div>
+
+              {/* Modal Content */}
+              <div className="flex-1 overflow-y-auto p-6">
+                <div className="space-y-3">
+                  {(billModal.type === 'electricity' ? electricBillHistory : waterBillHistory).map((bill, idx) => (
+                    <div
+                      key={idx}
+                      className={`p-4 rounded-lg border-2 transition-all ${
+                        bill.isCurrentMonth
+                          ? 'bg-blue-50 border-blue-300 shadow-md'
+                          : 'bg-white border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-semibold text-gray-900">{bill.month}</p>
+                          {bill.isCurrentMonth && (
+                            <p className="text-xs text-blue-600 font-semibold mt-1">CURRENT MONTH</p>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <span className="text-2xl font-bold text-gray-900">
+                            ₱{bill.amount.toLocaleString()}
+                          </span>
+                          <StatusBadge status={bill.status} />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="border-t border-gray-200 p-6 flex justify-end gap-3">
+                <button
+                  onClick={() => setBillModal({ show: false, type: null })}
+                  className="px-6 py-2 bg-gray-200 text-gray-900 font-semibold rounded-lg hover:bg-gray-300 transition-colors"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
