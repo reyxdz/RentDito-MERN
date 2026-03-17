@@ -73,8 +73,9 @@ const SpaceDashboard = () => {
   // Utility logic
   const utilitiesIncluded = space.utilities && space.utilities.included;
   const utilitiesTypes = (space.utilities && space.utilities.types) || [];
-  // Demo: random utility bill amount
-  const utilityBillAmount = utilitiesIncluded ? (Math.floor(Math.random() * 2000) + 500) : 0;
+  // Demo: random utility bill amounts
+  const electricityBillAmount = !utilitiesIncluded ? (Math.floor(Math.random() * 1500) + 500) : 0;
+  const waterBillAmount = !utilitiesIncluded ? (Math.floor(Math.random() * 800) + 300) : 0;
   const currentTenants = tenants.length;
   const expectedCapacity = space.capacity || 1;
 
@@ -124,22 +125,13 @@ const SpaceDashboard = () => {
                   </button>
                 </div>
               </div>
-              <div className="space-y-3">
-                <div>
-                  <p className="text-xs text-gray-500 mb-1">Common</p>
-                  <span className="text-xl font-bold text-yellow-600">
-                    {space.utilities?.electricity?.common ? '✓' : '−'}
-                  </span>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 mb-1">Own Submeter</p>
-                  <span className="text-xl font-bold text-yellow-600">
-                    {space.utilities?.electricity?.ownSubmeter ? '✓' : '−'}
-                  </span>
-                </div>
+              <div>
+                <span className="text-3xl font-bold text-yellow-600">
+                  ₱{electricityBillAmount.toLocaleString()}
+                </span>
               </div>
               <div className="mt-4 pt-4 border-t border-gray-100">
-                <p className="text-xs text-gray-500">Tenant pays separately</p>
+                <p className="text-xs text-gray-500">Estimated bill</p>
               </div>
             </div>
           )}
@@ -158,22 +150,13 @@ const SpaceDashboard = () => {
                   </button>
                 </div>
               </div>
-              <div className="space-y-3">
-                <div>
-                  <p className="text-xs text-gray-500 mb-1">Common</p>
-                  <span className="text-xl font-bold text-blue-600">
-                    {space.utilities?.water?.common ? '✓' : '−'}
-                  </span>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 mb-1">Own Submeter</p>
-                  <span className="text-xl font-bold text-blue-600">
-                    {space.utilities?.water?.ownSubmeter ? '✓' : '−'}
-                  </span>
-                </div>
+              <div>
+                <span className="text-3xl font-bold text-blue-600">
+                  ₱{waterBillAmount.toLocaleString()}
+                </span>
               </div>
               <div className="mt-4 pt-4 border-t border-gray-100">
-                <p className="text-xs text-gray-500">Tenant pays separately</p>
+                <p className="text-xs text-gray-500">Estimated bill</p>
               </div>
             </div>
           )}
